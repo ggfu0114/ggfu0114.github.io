@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-<url>
-<loc>http://tblog.pp4fun.com/</loc>
-<lastmod>2017-11-21</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.8</priority>
-</url>
+    <url>
+        <loc>https://ggfu0114.github.io/</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
 
-<url>
-<loc>http://tblog.pp4fun.com/about.html</loc>
-<lastmod>2017-12-12</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.8</priority>
-</url>
+    <url>
+        <loc>https://ggfu0114.github.io/post/2021/first_app.html</loc>
+        <lastmod>2021-07-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
 
 </urlset>
