@@ -25,7 +25,6 @@ base_url: https://ggfu0114.github.io/
 3. 將剛train好的model給volume到seldon-core的image上
 4. 透過定義seldon graph啟動predict的機制
 
-{%youtube ABislaVmNys %}
 
 ### 測試
 可以利用**seldon-core**出的測試工具來檢視predict serving是否正確執行：
