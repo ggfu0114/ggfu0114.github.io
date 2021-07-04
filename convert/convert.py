@@ -1,11 +1,14 @@
 #!/usr/bin/python
 
-import markdown
-import sys
+import glob
 import os
 import pathlib
+import sys
 from datetime import datetime
 from pathlib import Path
+
+import markdown
+from lxml import etree
 
 TEMPLATE = """
 <head>
@@ -50,12 +53,15 @@ Tags: AWS, IoT, policy
 base_url: https://ggfu0114.github.io/
 
 """
-import glob
+
 
 FILE_FD_PATH = pathlib.Path(__file__).parent.resolve()
 PROJECT_ROOT_FD = os.path.join(FILE_FD_PATH, '..')
 POST_HTML_FD = os.path.join(PROJECT_ROOT_FD, 'post')
 HOST_POST_URL = 'https://ggfu0114.github.io/post'
+SITEMAP_FILE_NAME = 'sitemap.xml'
+
+
 def _walk_all_html(fd: str):
     # for root, dirs, files in os.walk(fd):
 
@@ -71,14 +77,12 @@ def _walk_all_html(fd: str):
         print(sub_path)
     return sub_paths
 
-paths = _walk_all_html(POST_HTML_FD)
 
-from lxml import etree
-def _generate_sitemap_xml(sub_paths: list)->str:
-    # create XML 
+def _generate_sitemap_xml(sub_paths: list) -> None:
+    # create XML
     urlset = etree.Element('urlset')
-    urlset.attrib['xmlns']= 'http://www.sitemaps.org/schemas/sitemap/0.9'
-    
+    urlset.attrib['xmlns'] = 'http://www.sitemaps.org/schemas/sitemap/0.9'
+
     for sub_path in sub_paths:
         # another child with text
         child_url = etree.Element('url')
@@ -86,7 +90,7 @@ def _generate_sitemap_xml(sub_paths: list)->str:
         loc.text = f'{HOST_POST_URL}{sub_path}'
         child_url.append(loc)
         lastmod = etree.Element('lastmod')
-        lastmod.text = '2021-07-03'
+        lastmod.text = datetime.now().strftime('%Y-%m-%d')
         child_url.append(lastmod)
         changefreq = etree.Element('changefreq')
         changefreq.text = 'weekly'
@@ -99,13 +103,9 @@ def _generate_sitemap_xml(sub_paths: list)->str:
 
     # pretty string
     xml_string = etree.tostring(urlset, pretty_print=True).decode('utf-8')
-    return xml_string
-res = _generate_sitemap_xml(paths)
-print(res)
-
-
-
-
+    sitemap_file = os.path.join(PROJECT_ROOT_FD, SITEMAP_FILE_NAME)
+    with open(sitemap_file, 'w') as f:
+        f.write(xml_string)
 
 
 def main():
@@ -139,6 +139,9 @@ def main():
 
         whole_html = TEMPLATE % (html_title, html_description, html)
         f.write(whole_html)
+
+    paths = _walk_all_html(POST_HTML_FD)
+    _ = _generate_sitemap_xml(paths)
 
 
 if __name__ == '__main__':
