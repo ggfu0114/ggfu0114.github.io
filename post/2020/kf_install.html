@@ -1,0 +1,142 @@
+
+<head>
+<title>Kubeflow安裝及入門</title>
+<meta charset="utf-8" />
+<meta name="description" content="安裝Kubeflow系統在機器上，分享debug過程" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="kubeflow">Kubeflow安裝及入門</h1>
+<h3 id="_1">安裝需求</h3>
+<ul>
+<li>安裝好ksonnet, Version 0.11.0 or later.</li>
+<li>Kubernetes 1.8 or later</li>
+</ul>
+<h4 id="ksonnet">安裝ksonnet</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">export</span> <span class="n">KS_VER</span><span class="o">=</span><span class="mf">0.12</span><span class="o">.</span><span class="mi">0</span>
+<span class="k">export</span> <span class="n">KS_PKG</span><span class="o">=</span><span class="n">ks_</span><span class="o">$</span><span class="p">{</span><span class="n">KS_VER</span><span class="p">}</span><span class="n">_linux_amd64</span>
+<span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/$</span><span class="p">{</span><span class="n">KS_PKG</span><span class="p">}</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ksonnet</span><span class="o">/</span><span class="n">ksonnet</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v</span><span class="o">$</span><span class="p">{</span><span class="n">KS_VER</span><span class="p">}</span><span class="o">/$</span><span class="p">{</span><span class="n">KS_PKG</span><span class="p">}</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> \
+  <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">check</span><span class="o">-</span><span class="n">certificate</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">$</span><span class="p">{</span><span class="n">HOME</span><span class="p">}</span><span class="o">/</span><span class="n">bin</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/$</span><span class="n">KS_PKG</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="o">-</span><span class="n">C</span> <span class="o">$</span><span class="p">{</span><span class="n">HOME</span><span class="p">}</span><span class="o">/</span><span class="n">bin</span>
+<span class="k">export</span> <span class="n">PATH</span><span class="o">=$</span><span class="n">PATH</span><span class="p">:</span><span class="o">$</span><span class="p">{</span><span class="n">HOME</span><span class="p">}</span><span class="o">/</span><span class="n">bin</span><span class="o">/$</span><span class="n">KS_PKG</span>
+</code></pre></div>
+
+<p>官方皆學的網站可以參考：  <a href="https://www.kubeflow.org/docs/guides/components/ksonnet/">linux install ks</a></p>
+<h4 id="kubeflow_1">安裝kubeflow</h4>
+<ul>
+<li>下載安裝kubeflow的script</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">export</span> <span class="n">KUBEFLOW_SRC</span><span class="o">=</span><span class="n">kf_src</span>
+<span class="n">mkdir</span> <span class="o">$</span><span class="p">{</span><span class="n">KUBEFLOW_SRC</span><span class="p">}</span>
+<span class="n">cd</span> <span class="o">$</span><span class="p">{</span><span class="n">KUBEFLOW_SRC</span><span class="p">}</span>
+<span class="k">export</span> <span class="n">KUBEFLOW_TAG</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mf">3.1</span>
+<span class="n">curl</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kubeflow</span><span class="o">/</span><span class="n">kubeflow</span><span class="o">/$</span><span class="p">{</span><span class="n">KUBEFLOW_TAG</span><span class="p">}</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">download</span><span class="o">.</span><span class="n">sh</span> <span class="o">|</span> <span class="n">bash</span>
+</code></pre></div>
+
+<ul>
+<li>將下載好的ks檔部署到K8S環境上</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">export</span> <span class="n">KFAPP</span><span class="o">=</span><span class="n">kf_conf</span>
+<span class="n">scripts</span><span class="o">/</span><span class="n">kfctl</span><span class="o">.</span><span class="n">sh</span> <span class="n">init</span> <span class="o">$</span><span class="p">{</span><span class="n">KFAPP</span><span class="p">}</span> <span class="o">--</span><span class="n">platform</span> <span class="n">none</span>
+<span class="n">cd</span> <span class="o">$</span><span class="p">{</span><span class="n">KFAPP</span><span class="p">}</span>
+<span class="o">../</span><span class="n">scripts</span><span class="o">/</span><span class="n">kfctl</span><span class="o">.</span><span class="n">sh</span> <span class="n">generate</span> <span class="n">k8s</span>
+<span class="o">../</span><span class="n">scripts</span><span class="o">/</span><span class="n">kfctl</span><span class="o">.</span><span class="n">sh</span> <span class="n">apply</span> <span class="n">k8s</span>
+</code></pre></div>
+
+<h4 id="kubeflow-status">驗證kubeflow status</h4>
+<p>執行<code>kubectl get pods --all-namespaces</code>可以檢視目前pod運行的狀態<br />
+會發現有一個pod會是<code>pending</code>的狀態，<code>vizier-db-547967c899-ppr4p</code><br />
+執行<code>kubectl describe vizier-db-547967c899-ppr4p -n kubeflow</code><br />
+可以看到events出現以下字眼</p>
+<div class="codehilite"><pre><span></span><code>Warning  FailedScheduling  1m (x67 over 6m)  default-scheduler  pod has unbound PersistentVolumeClaims
+</code></pre></div>
+
+<p>因為沒有PV，所以DB沒辦法正常啟動，所以只要建立一個PV給資料庫儲存東西就會解決這個問題。</p>
+<h4 id="qnamespaces-kubeflow-not-found">Q:安裝過程出現<code>namespaces "kubeflow" not found</code></h4>
+<ul>
+<li>因為Kubeflow version 0.3.0有點問題，只要改成0.3.1即可</li>
+</ul>
+<h4 id="qpod">Q:安裝啟動後pod出現以下的錯誤：</h4>
+<div class="codehilite"><pre><span></span><code>The node was low on resource: ephemeral-storage. Container statsd was using 52Ki, which exceeds its request of 0. Container ambassador was using 244Ki, which exceeds its request of 0. Container statsd-sink was using 52Ki, which exceeds its request of 0.
+</code></pre></div>
+
+<p>node的空間已經不夠了，導致我的pod被驅逐(evicted)</p>
+<h3 id="jupyter-service">進入jupyter service</h3>
+<p>如果是在local端的主機自建的Kubeflow<br />
+有兩個方式可以進去到jupyter介面 <br />
+1. port forward </p>
+<div class="codehilite"><pre><span></span><code>kubectl port-forward svc/tf-hub-lb -n kubeflow 8080:80
+</code></pre></div>
+
+<p>在網頁上打入<code>http://127.0.0.1:8080</code>就可以看到網頁</p>
+<ol start="2">
+<li>node port</li>
+</ol>
+<p>需要執行修改service<code>kubectl -n kubeflow edit svc tf-hub-lb</code><br />
+修改成以下狀態</p>
+<div class="codehilite"><pre><span></span><code><span class="n">sessionAffinity</span><span class="o">:</span> <span class="n">None</span>
+  <span class="n">type</span><span class="o">:</span> <span class="n">NodePort</span>
+</code></pre></div>
+
+<h3 id="gpu-node">啟用GPU node</h3>
+<ul>
+<li>如果主機上有想要用GPU加速Machine Learning的速度，需要將有GPU的node加入Kubernates的cluster裡面</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
+</code></pre></div>
+
+<p>透過安裝nvidia plugin可以enable GPU的support<br />
+- 檢查node中gpu數量</p>
+<div class="codehilite"><pre><span></span><code>kubectl get nodes &quot;-o=custom-columns=NAME:.metadata.name,GPU:.status.allocatable.nvidia\.com/gpu&quot;
+</code></pre></div>
+
+<h4 id="q">Q:</h4>
+<p>雖然在K8S環境上已經有join GPU的node, 但是還是無法取的GPU的資訊，用log看了一下gpu plugin pod的資訊，發現以下錯誤訊息：</p>
+<div class="codehilite"><pre><span></span><code><span class="mi">2018</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">15</span> <span class="mi">03</span><span class="o">:</span><span class="mi">49</span><span class="o">:</span><span class="mi">12</span> <span class="n">Failed</span> <span class="k">to</span> <span class="n">initialize</span> <span class="n">NVML</span><span class="o">:</span> <span class="n">could</span> <span class="k">not</span> <span class="k">load</span> <span class="n">NVML</span> <span class="n">library</span><span class="p">.</span>
+<span class="mi">2018</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">15</span> <span class="mi">03</span><span class="o">:</span><span class="mi">49</span><span class="o">:</span><span class="mi">12</span> <span class="k">If</span> <span class="n">this</span> <span class="k">is</span> <span class="n">a</span> <span class="n">GPU</span> <span class="n">node</span><span class="p">,</span> <span class="n">did</span> <span class="n">you</span> <span class="k">set</span> <span class="n">the</span> <span class="n">docker</span> <span class="k">default</span> <span class="n">runtime</span> <span class="k">to</span> <span class="n n-Quoted">`nvidia`</span><span class="nv">?</span>
+</code></pre></div>
+
+<p>解決的辦法為：修改<code>/etc/docker/daemon.json</code>的資訊，讓docker的default-runtime為nvidia</p>
+<div class="codehilite"><pre><span></span><code>{
+    &quot;default-runtime&quot;: &quot;nvidia&quot;,
+    &quot;runtimes&quot;: {
+        &quot;nvidia&quot;: {
+            &quot;path&quot;: &quot;/usr/bin/nvidia-container-runtime&quot;,
+            &quot;runtimeArgs&quot;: []
+        }
+    }
+}
+</code></pre></div>
+
+<h3 id="kubeflow_2">刪除kubeflow</h3>
+<p>kubectl delete namespace kubeflow -n kubeflow</p>
+<h3 id="faq">FAQ</h3>
+<p>執行ks init都會出現以下錯誤訊息：<br />
+<code>panic: runtime error: invalid memory address or nil pointer dereference</code><br />
+上網查了一下好像是k8s版本為v1.12版本時所會出現的錯誤，必須降版到1.11去解決這個issue</p>
+<div class="codehilite"><pre><span></span><code>curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - &amp;&amp; \
+  echo &quot;deb http://apt.kubernetes.io/ kubernetes-xenial main&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list &amp;&amp; \
+  sudo apt-get update -q &amp;&amp; \
+  sudo apt-get install -qy --allow-downgrades kubelet=1.11.4-00 kubectl=1.11.4-00 kubeadm=1.11.4-00
+</code></pre></div>
+</article>

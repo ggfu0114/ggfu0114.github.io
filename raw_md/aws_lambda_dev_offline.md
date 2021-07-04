@@ -1,3 +1,11 @@
+Title: Serverless offline 開發設定 - 基礎篇
+Description: 為了加速開發的效率，開發過程中不會想要每次都佈署到AWS做測試或開發。Serverless offline套件可以解決這件事情。透過模擬 AWS λ and API Gateway ，開發者在本機端就可以run一個的server去模擬再AWS服務的情況
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
+
 # Serverless offline 開發設定 - 基礎篇
 > 說明
 

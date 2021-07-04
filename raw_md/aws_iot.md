@@ -1,3 +1,12 @@
+Title: AWS IoT介紹
+Description: 裝置可以透過 certificates 去做驗證,
+      連接上AWS IoT service做系統整合應用
+Authors: GGFU
+Date: 31/12/2020
+Tags: AWS, IoT, policy
+base_url: https://ggfu0114.github.io/
+
+
 # AWS IoT
 
 > 說明
@@ -14,7 +23,7 @@
 
 ### Policy設定
 - 以下的這個 Policy設定代表使用者只要有合理的 certificates，就可以針對IoT上所有的resources 做連線，推播，接收的動做，沒做任何的限制管控，如果要限制使用者能力有下面另外一個範例
-```javascript=
+```javascript
 {
   "Version": "2012-10-17",
   "Statement": [{
@@ -29,9 +38,10 @@
     }]
 }
 ```
+
 - 如果想讓使用者只能針對自己 CertificateId 的 topic 操作，policy 就要修改成以下的方式，利用 `${iot:CertificateId}` 的變數，AWS IoT 會去檢查裝置端連線時所使用的憑證，達到每個憑證只能操作對應憑證 ID 的 Topic，降低資訊被竊取的風險。
 
-```javascript=
+```javascript
 {
   "Version": "2012-10-17",
   "Statement": [

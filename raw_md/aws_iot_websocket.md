@@ -1,3 +1,10 @@
+Title: AWS IoT with websocket
+Description: AWS在IoT的服務上也有做到MQTT Over the WebSocket Protocol，透過AWS SigV4的身份認證, 利用Port 443，我們可以透過網頁連線上AWS IoT的服務
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # AWS IoT with websocket
 
 - 在大多數的瀏覽器都有支援websocket的protocol前提下，實作網頁即時接收訊息的功能上，我們希望每個網頁都可以當作是一個mqtt的裝置，如此一來就可以即時推播給各個網頁，也可以即時的接收到來自client端的訊息。

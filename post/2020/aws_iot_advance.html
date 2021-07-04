@@ -1,0 +1,92 @@
+
+<head>
+<title>AWS IoT | 進階資訊分享</title>
+<meta charset="utf-8" />
+<meta name="description" content="在 AWS IoT的資源上，有部份的 topic name是被保留，並寫說明用IoT service 驅動lambda." />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="aws-iot-">AWS IoT - 進階</h1>
+<h3 id="iot-reserved-topic">IoT reserved topic</h3>
+<ul>
+<li>在 AWS IoT的資源上，有部份的 topic name是被保留。</li>
+</ul>
+<p><code>$aws/events/presence/connected/#</code> : 如果有任何的使用者連上 IoT 就會推播訊息到這個 Topic <br />
+<code>$aws/events/presence/disconnected/#</code>: 如果有任何的使用者斷線,就會推播訊息</p>
+<ul>
+<li>這個是當使用者 connected/disconnected 推播到 topic 裡的訊息範例<br />
+```javascript=<br />
+{<br />
+    "clientId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",<br />
+    "timestamp": 1460065214626,<br />
+    "eventType": "connected",<br />
+    "sessionIdentifier": "00000000-0000-0000-0000-000000000000",<br />
+    "principalIdentifier": "000000000000/ABCDEFGHIJKLMNOPQRSTU:some-user/ABCDEFGHIJKLMNOPQRSTU:some-user"<br />
+}</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>`$aws/events/subscriptions/subscribed/#`: 如果有任何的使用者訂閱了任何的 topic就會推播訊息到這個topic
+`$aws/events/subscriptions/unsubscribed/#`：  如果有任何的使用者解訂閱了任何的 topic就會推播訊息
+
+- 這個是 subscribed/unsubscribed 推播的訊息範例
+```javascript=
+{
+    &quot;clientId&quot;: &quot;186b5&quot;,
+    &quot;timestamp&quot;: 1460065214626,
+    &quot;eventType&quot;: &quot;subscribed&quot; | &quot;unsubscribed&quot;,
+    &quot;sessionIdentifier&quot;: &quot;00000000-0000-0000-0000-000000000000&quot;,
+    &quot;principalIdentifier&quot;: &quot;000000000000/ABCDEFGHIJKLMNOPQRSTU:some-user/ABCDEFGHIJKLMNOPQRSTU:some-user&quot;
+    &quot;topics&quot; : [&quot;foo/bar&quot;,&quot;device/data&quot;,&quot;dog/cat&quot;]
+}
+</code></pre></div>
+
+<p>:::info</p>
+<h4 id="topic-topic">同時要聆聽相同 Topic 底下不同的子 Topic 可用 + 號串聯，例如：</h4>
+<p><code>$aws/events/subscriptions/+/#</code>: 可以同時聆聽到 connected, disconnected, subscribed, unsubscribed ...的訊息<br />
+<code>company/+/member</code>： + 號可以是任意的字串，只要符合這個 Topic 的 name 的規則，都可以收到資訊<br />
+:::</p>
+<h3 id="iot-trigger-lambda">IoT trigger lambda</h3>
+<p>IoT 要 trigger lambda 需要先定義 rule，透過 rule 的定義去執行 Lambda和傳送對應的參數，rule包含兩個主要資訊<br />
+<code>query statement</code> 這個參數是拿來定義要傳入 lambda 的規則，例如：</p>
+<p>```sql=<br />
+SELECT * as data FROM '$aws/events/presence/connected/#' <br />
+/<em> 將所有 IoT 所收到的資料都傳進去 lambda 的參數裡 </em>/</p>
+<p>SELECT * as data, topic() as topic, clientid() as cliendId, timestamp() as timestamp FROM '+/updateStatus'<br />
+/<em> 所有傳送到 +/updateStatus 的資料，我們將 data, topic,clientid, ts 都傳入 lambda</em>/</p>
+<div class="codehilite"><pre><span></span><code><span class="n n-Quoted">`actions`</span> <span class="n">用來定義要將哪隻</span> <span class="n">Lambda</span> <span class="n">驅動</span>
+<span class="o">-</span> <span class="n">透過</span> <span class="n">AWS</span> <span class="n">IoT</span> <span class="n">可手動選擇驅動的</span> <span class="n">Lambda</span>
+<span class="o">!</span><span class="err">[]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">i</span><span class="p">.</span><span class="n">imgur</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">oUCBSsh</span><span class="p">.</span><span class="n">png</span><span class="p">)</span>
+
+<span class="o">-</span> <span class="n">或是，用的是</span> <span class="n">serverless</span> <span class="n">套件去佈署</span> <span class="n">AWS</span> <span class="n">resources，下面是一個佈署範例：</span>
+<span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">yaml=</span>
+<span class="n n-Quoted">playerUpdateStatus:</span>
+<span class="n n-Quoted">    handler: handler.handler_function</span>
+<span class="n n-Quoted">    name: updateDeviceStatus</span>
+<span class="n n-Quoted">    description: IoT Device state</span>
+<span class="n n-Quoted">    events:</span>
+<span class="n n-Quoted">      - iot:</span>
+<span class="n n-Quoted">          name: UpdateDeviceRule</span>
+<span class="n n-Quoted">          sql: &quot;SELECT * as data FROM &#39;$aws/events/subscriptions/subscribed/#&#39;&quot;</span>
+<span class="n n-Quoted">          description: &quot;IoT Update Rule&quot;</span>
+</code></pre></div>
+
+<h6 id="tags-aws-iot-lambda-topic">tags: <code>AWS</code>, <code>IoT</code>, <code>lambda</code>, <code>topic</code></h6>
+</article>

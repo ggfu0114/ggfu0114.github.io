@@ -1,3 +1,11 @@
+Title: Kubeflow Mnist範例介紹
+Description: 利用簡單的mnist來做為範例，介紹如何在Kubeflow進行training跟serving的流程。Kubeflow利用argo workflow將整個流程寫成腳本，透過指令驅動整個AI training與serving過程
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
+
 # Kubeflow Mnist範例介紹
 
 ![](https://cdn-images-1.medium.com/max/1000/1*akWVsdGH6XW9SgDIiePq4Q.png)

@@ -1,3 +1,11 @@
+Title: AWS S3 REST 數位簽章與驗證
+Description: 利用數位簽章讓使用者可以透過 api resquest 去做身份認可(identity)並操作S3裏面的物件
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
+
 # AWS S3 REST簽章與驗證
 - 假設在S3裡的物件只設定給 "authenticated AWS user" 操作，那我們要如何利用數位簽章讓使用者可以透過 api resquest 去做身份認可(identity)並操作S3裏面的物件。
 - 假設在S3上我們有一個name為 wisigntest 的bucket，裏面存在一個名為hello.jpg的物件，設定為 "authenticated AWS user" 可以R/W。我們將紀錄如何使用API去存取S3物件。

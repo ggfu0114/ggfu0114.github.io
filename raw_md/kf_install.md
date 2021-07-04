@@ -1,3 +1,11 @@
+Title: Kubeflow安裝及入門
+Description: 安裝Kubeflow系統在機器上，分享debug過程
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
+
 # Kubeflow安裝及入門
 
 

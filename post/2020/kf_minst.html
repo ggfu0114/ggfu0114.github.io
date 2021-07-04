@@ -1,0 +1,132 @@
+
+<head>
+<title>Kubeflow Mnist範例介紹</title>
+<meta charset="utf-8" />
+<meta name="description" content="利用簡單的mnist來做為範例，介紹如何在Kubeflow進行training跟serving的流程。Kubeflow利用argo workflow將整個流程寫成腳本，透過指令驅動整個AI training與serving過程" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="kubeflow-mnist">Kubeflow Mnist範例介紹</h1>
+<p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*akWVsdGH6XW9SgDIiePq4Q.png" /></p>
+<p>官網的Git：<a href="https://github.com/kubeflow/example-seldon">kubeflow mnist</a><br />
+- 利用簡單的mnist來做為範例，介紹如何在Kubeflow進行training跟serving的流程。Kubeflow利用argo workflow將整個流程寫成腳本，透過指令驅動整個AI training與serving過程。training階段會將訓練model的程式碼包成docker image，建立TFjob將model訓練出來。serving階段，會將訓練好的model利用seldon-core的幫助，建立起prediction服務。</p>
+<h3 id="training">Training 的流程</h3>
+<ol>
+<li>將training的程式從git上載下來，打包成training image</li>
+<li>將打包好的image推上去docker registry</li>
+<li>利用TFjob執行image產生model</li>
+<li>將model給volume出來</li>
+</ol>
+<h3 id="serving">Serving 的流程</h3>
+<ol>
+<li>將serving的程式從git上載下來，打包成serving image</li>
+<li>將打包好的image推上去docker registry</li>
+<li>將剛train好的model給volume到seldon-core的image上</li>
+<li>透過定義seldon graph啟動predict的機制</li>
+</ol>
+<p>{%youtube ABislaVmNys %}</p>
+<h3 id="_1">測試</h3>
+<p>可以利用<strong>seldon-core</strong>出的測試工具來檢視predict serving是否正確執行：</p>
+<div class="codehilite"><pre><span></span><code>$ seldon-core-api-tester --ambassador-path /seldon/kubeflow/mnist-classifier -p contract.json &lt;host ip&gt; &lt;host port&gt;
+</code></pre></div>
+
+<h3 id="debug">Debug</h3>
+<blockquote>
+<p>錯誤訊息：</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>error when creating &quot;/tmp/manifest.yaml&quot;: tfjobs.kubeflow.org is forbidden: User &quot;system:serviceaccount:kubeflow:default&quot; cannot create tfjobs.kubeflow.org in the namespace &quot;kubeflow&quot;
+</code></pre></div>
+
+<ul>
+<li>將kubeflow namespace的帳號default 加上cluster-admin的權限</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>kubectl create clusterrolebinding sa-admin --clusterrole=cluster-admin --serviceaccount=kubeflow:default
+</code></pre></div>
+
+<blockquote>
+<p>錯誤訊息：</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code> Failed to submit workflow: workflows.argoproj.io is forbidden: User &quot;system:serviceaccount:kubeflow:jupyter-notebook&quot; cannot create workflows.argoproj.io in the namespace &quot;kubeflow&quot;
+</code></pre></div>
+
+<p>因為jupyter的pod，serviceaccount預設為<code>jupyter-notebook</code>，綁定這個serviceaccount的role為<code>jupyter-notebook-role</code>，如果把<code>jupyter-notebook-role</code>資訊顯示出來看為</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Name</span><span class="o">:</span>         <span class="n">jupyter</span><span class="o">-</span><span class="n">notebook</span><span class="o">-</span><span class="n">role</span>
+<span class="n">Labels</span><span class="o">:</span>       <span class="n">app</span><span class="o">.</span><span class="na">kubernetes</span><span class="o">.</span><span class="na">io</span><span class="o">/</span><span class="n">deploy</span><span class="o">-</span><span class="n">manager</span><span class="o">=</span><span class="n">ksonnet</span>
+              <span class="n">ksonnet</span><span class="o">.</span><span class="na">io</span><span class="o">/</span><span class="n">component</span><span class="o">=</span><span class="n">jupyterhub</span>
+<span class="n">Annotations</span><span class="o">:</span>  <span class="n">ksonnet</span><span class="o">.</span><span class="na">io</span><span class="sr">/managed={&quot;pristine&quot;:&quot;H4sIAAAAAAAA/4SQvU4rMRCF+/sYp4ycvUqH9gXoKWjQFuPdgTjr9VjjcSBEeXfkRQiJLdLZc873+ecKyuGZtQRJ6KGexo6qHUXDJ1mQ1M0PpQvy/</span><span class="mi">3</span><span class="n">zwbHSAwxzShB5PEhkOCxtNZIT</span><span class="o">+</span><span class="n">ikieY2mruUhKbA0cZcmSOBl6nGq</span><span class="o">+...</span>
+<span class="n">PolicyRule</span><span class="o">:</span>
+  <span class="n">Resources</span>               <span class="n">Non</span><span class="o">-</span><span class="n">Resource</span> <span class="n">URLs</span>  <span class="n">Resource</span> <span class="n">Names</span>  <span class="n">Verbs</span>
+  <span class="o">---------</span>               <span class="o">-----------------</span>  <span class="o">--------------</span>  <span class="o">-----</span>
+  <span class="n">deployments</span>             <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">pods</span>                    <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">replicasets</span>             <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">services</span>                <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">deployments</span><span class="o">.</span><span class="na">apps</span>        <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">replicasets</span><span class="o">.</span><span class="na">apps</span>        <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">jobs</span><span class="o">.</span><span class="na">batch</span>              <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">deployments</span><span class="o">.</span><span class="na">extensions</span>  <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="n">replicasets</span><span class="o">.</span><span class="na">extensions</span>  <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+  <span class="o">*.</span><span class="n">kubeflow</span><span class="o">.</span><span class="na">org</span>          <span class="o">[]</span>                 <span class="o">[]</span>              <span class="o">[*]</span>
+</code></pre></div>
+
+<p>缺少了<code>workflows.argoproj.io</code>這個操作Argo的resource權限，所以我們可以透過編輯這個role來解決這個問題。在role的rule裡面加上：</p>
+<div class="codehilite"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">apiGroups</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">argoproj.io</span>
+  <span class="nt">resources</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">workflows</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">workflows/finalizers</span>
+  <span class="nt">verbs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="s">&#39;*&#39;</span>
+</code></pre></div>
+
+<ul>
+<li>需要建立docker registery的帳號密碼。<a href="https://github.com/kubeflow/example-seldon/blob/master/k8s_setup/docker-credentials-secret.yaml.tpl">docker-credentials-secret.yaml</a></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">apiVersion</span><span class="o">:</span> <span class="n">v1</span>
+<span class="n">data</span><span class="o">:</span>
+  <span class="n">password</span><span class="o">:</span> <span class="o">&lt;</span><span class="n">base</span> <span class="mi">64</span> <span class="n">password</span><span class="o">&gt;</span>
+  <span class="n">username</span><span class="o">:</span> <span class="o">&lt;</span><span class="n">base</span> <span class="mi">64</span> <span class="n">username</span><span class="o">&gt;</span>
+<span class="n">kind</span><span class="o">:</span> <span class="n">Secret</span>
+<span class="n">metadata</span><span class="o">:</span>
+  <span class="n">name</span><span class="o">:</span> <span class="n">docker</span><span class="o">-</span><span class="n">credentials</span>
+  <span class="kd">namespace</span><span class="o">:</span> <span class="k">default</span>
+<span class="n">type</span><span class="o">:</span> <span class="n">Opaque</span>
+</code></pre></div>
+
+<ul>
+<li>需要先建立nfs讓training放置訓練完的model。 <a href="https://github.com/kubeflow/example-seldon/blob/master/nfs.md">nfs.</a></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">apiVersion</span><span class="o">:</span> <span class="n">v1</span>
+<span class="n">kind</span><span class="o">:</span> <span class="n">PersistentVolumeClaim</span>
+<span class="n">metadata</span><span class="o">:</span>
+  <span class="n">name</span><span class="o">:</span> <span class="n">nfs</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">spec</span><span class="o">:</span>
+  <span class="n">accessModes</span><span class="o">:</span>
+    <span class="o">-</span> <span class="n">ReadWriteMany</span>
+  <span class="n">storageClassName</span><span class="o">:</span> <span class="n">nfs</span><span class="o">-</span><span class="n">client</span>
+  <span class="n">resources</span><span class="o">:</span>
+    <span class="n">requests</span><span class="o">:</span>
+      <span class="n">storage</span><span class="o">:</span> <span class="mi">30</span><span class="n">Gi</span>
+</code></pre></div>
+
+<h6 id="tags-mnist-seldon-core-kubeflow-argo-tfjob-model-ai">tags: <code>mnist</code> <code>seldon-core</code> <code>kubeflow</code> <code>argo</code> <code>tfjob</code> <code>model</code> <code>AI</code></h6>
+</article>

@@ -1,0 +1,128 @@
+
+<head>
+<title>AWS S3 REST 數位簽章與驗證</title>
+<meta charset="utf-8" />
+<meta name="description" content="利用數位簽章讓使用者可以透過 api resquest 去做身份認可(identity)並操作S3裏面的物件" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="aws-s3-rest">AWS S3 REST簽章與驗證</h1>
+<ul>
+<li>假設在S3裡的物件只設定給 "authenticated AWS user" 操作，那我們要如何利用數位簽章讓使用者可以透過 api resquest 去做身份認可(identity)並操作S3裏面的物件。</li>
+<li>假設在S3上我們有一個name為 wisigntest 的bucket，裏面存在一個名為hello.jpg的物件，設定為 "authenticated AWS user" 可以R/W。我們將紀錄如何使用API去存取S3物件。</li>
+</ul>
+<blockquote>
+<p>簡易瀏覽物件</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/hello.jpg</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">https://wisigntest.s3-ap-northeast-1.amazonaws.com</span>
+<span class="na">Date</span><span class="o">:</span> <span class="l">Fri, 28 Apr 2017 05:56:29 GMT</span>
+
+Authorization: AWS AKIAIOSFODNN7EXAMPLE:frJIUN8DYpKDtOLCwo//yllqDzg=
+</code></pre></div>
+
+<p>下面是我用Postman去讀取S3檔案的畫面<br />
+<img alt="" src="https://i.imgur.com/dnJRA2I.png" /></p>
+<blockquote>
+<p>The Authentication Header</p>
+</blockquote>
+<p>下面的格式是主要傳送給 API 的 Header 上要添加的 Authorization 資訊，透過Signature，AWS可以驗證此次的操作是否有效。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Authorization</span><span class="o">:</span> <span class="n">AWS</span> <span class="o">{</span><span class="n">AWSAccessKeyId</span><span class="o">}:{</span><span class="n">Signature</span><span class="o">}</span>
+</code></pre></div>
+
+<p>下面是 Nodejs 計算的Signature程式碼<br />
+```javascript=<br />
+var crypto = require("crypto");</p>
+<p>// from IAM role<br />
+var secret_access_key = '64nd6BY7gTPDspq54gQcRth5dvORNdDvqL4BZ5zd';<br />
+var access_key_id = 'AKIAIUHT2BNZP65ADZKQ'</p>
+<p>var StringToSign = "GET" + "\n" +<br />
+    "" + "\n" +<br />
+    "" + "\n" +<br />
+    new Date().toUTCString() + "\n" +<br />
+    "/wisigntest/hello.jpg";</p>
+<p>var Signature = crypto<br />
+                .createHmac('sha1', secret_access_key)<br />
+                .update(StringToSign)<br />
+                .digest('base64');</p>
+<p>console.log("\n=====Signature=====");<br />
+console.log(Signature);<br />
+console.log("\n=====StringToSign=====");<br />
+console.log(StringToSign)</p>
+<div class="codehilite"><pre><span></span><code>所以 Signature 會因為每分每秒時間的變動，加上每次要操作的行為不一樣而有不同的結果。如果 Header 上Date的數值跟當前的時間差太遠會產生出RequestTimeTooSkewed Error(如下圖)，最多只能延遲15 minutes 進行操作。一旦過期就只能再重新產生一組新的操作。
+```yaml=
+
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;Error&gt;</span>
+    <span class="nt">&lt;Code&gt;</span>RequestTimeTooSkewed<span class="nt">&lt;/Code&gt;</span>
+    <span class="nt">&lt;Message&gt;</span>The difference between the request time and the current time is too large.<span class="nt">&lt;/Message&gt;</span>
+    <span class="nt">&lt;RequestTime&gt;</span>Fri, 28 Apr 2017 07:01:06 GMT<span class="nt">&lt;/RequestTime&gt;</span>
+    <span class="nt">&lt;ServerTime&gt;</span>2017-04-28T07:17:20Z<span class="nt">&lt;/ServerTime&gt;</span>
+    <span class="nt">&lt;MaxAllowedSkewMilliseconds&gt;</span>900000<span class="nt">&lt;/MaxAllowedSkewMilliseconds&gt;</span>
+    <span class="nt">&lt;RequestId&gt;</span>A1CC38F343F62CB3<span class="nt">&lt;/RequestId&gt;</span>
+    <span class="nt">&lt;HostId&gt;</span>mJYpxdY5MthZwY4NUeF/MTIcJbYPpZ+6+haAfHkn40AX32XMrP618pzOv+MsZvAE965jaM1OgCk=<span class="nt">&lt;/HostId&gt;</span>
+<span class="nt">&lt;/Error&gt;</span>
+</code></pre></div>
+
+<blockquote>
+<p>利用 API form 上傳檔案到 S3</p>
+</blockquote>
+<ul>
+<li>如果今天有一個檔案叫 hello1.js要上傳到S3的 wisigntest bucket 裡，可以依照以下步驟去執行</li>
+</ul>
+<p><img alt="" src="https://i.imgur.com/KFIxuR7.png" /><br />
+<img alt="" src="https://i.imgur.com/Y1zmUks.png" /></p>
+<p>在 Postman 上做發送照片的 request，Header參數上依然要填上 Authorization, Date參數，Content-Type填上"text/plain"。</p>
+<p>```javascript=<br />
+var StringToSign = "PUT" + "\n" +<br />
+    "" + "\n" +<br />
+    "text/plain" + "\n" +<br />
+    new Date().toUTCString() + "\n" +<br />
+    "/wisigntest/hello1.jpg";</p>
+<div class="codehilite"><pre><span></span><code><span class="err">只要把上面的</span> <span class="s2">&quot;StringToSign&quot;</span> <span class="err">變數改成上面所序，就可以產出正確的</span> <span class="n">Signature</span> <span class="err">了</span>
+
+<span class="o">&gt;</span> <span class="err">沒有</span> <span class="n">Header</span> <span class="err">的</span> <span class="n">request</span> <span class="n">authentication</span>
+
+<span class="err">此外</span> <span class="n">S3</span> <span class="err">提供不需帶</span> <span class="n">Header</span> <span class="err">的存取方法。基本上是將</span><span class="n">Date用Expires取代</span><span class="err">，然後所有的參數都放置在</span> <span class="n">URL</span> <span class="err">上。例如下方的</span> <span class="n">URL</span><span class="err">，主要的參數有</span> <span class="n">AWSAccessKeyId</span><span class="p">,</span> <span class="n">Expires</span><span class="p">,</span> <span class="n">Signature</span><span class="err">。</span><span class="n">AWSAccessKeyId</span> <span class="err">跟</span> <span class="n">Signature</span> <span class="err">的產出原理一樣，</span><span class="n">Expires</span> <span class="err">則是當前的</span> <span class="n">Timestamp</span> <span class="err">再加上預期</span> <span class="n">URL</span> <span class="err">失效的時間。</span> 
+
+<span class="p">:::</span><span class="n">success</span>
+<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">wisigntest</span><span class="o">.</span><span class="n">s3</span><span class="o">-</span><span class="n">ap</span><span class="o">-</span><span class="n">northeast</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hello</span><span class="o">.</span><span class="n">jpg</span><span class="err">?</span><span class="n">AWSAccessKeyId</span><span class="o">=</span><span class="n">AKIAIUHT2BNZP65ADZKQ</span><span class="o">&amp;</span><span class="n">Expires</span><span class="o">=</span><span class="mi">1493368109</span><span class="o">&amp;</span><span class="n">Signature</span><span class="o">=</span><span class="n">xLO3tdF</span><span class="o">%</span><span class="mi">2</span><span class="n">FAutv</span><span class="o">%</span><span class="mi">2</span><span class="n">BYinCfA7G8C157E</span><span class="o">%</span><span class="mi">3</span><span class="n">D</span>
+<span class="p">:::</span>
+
+<span class="err">產出</span> <span class="n">Signature</span> <span class="err">需要將</span> <span class="n">Date</span> <span class="err">變數取代為預期失效的</span> <span class="n">Timestamp</span> <span class="err">時間。下面的例子即是當前時間加上</span> <span class="mi">600</span> <span class="n">Seconds</span> <span class="err">時，</span><span class="n">URL</span> <span class="err">就會失效。</span>
+
+
+
+<span class="err">```</span><span class="n">javascript</span><span class="o">=</span>
+<span class="k">var</span> <span class="n">StringToSign</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+    <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+    <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+    <span class="n">parseInt</span><span class="p">(</span><span class="n">Date</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span><span class="o">+</span><span class="mi">600</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+    <span class="s2">&quot;/wisigntest/hello.jpg&quot;</span><span class="p">;</span>
+</code></pre></div>
+
+<ul>
+<li>參考資料<br />
+<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">AWS S3 Signing and Authenticating REST Requests</a></li>
+</ul>
+<h6 id="tags-s3-presign-rest">tags: <code>S3</code>, <code>presign</code>, <code>REST</code>,</h6>
+</article>

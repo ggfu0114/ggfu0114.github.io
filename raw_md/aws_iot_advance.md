@@ -1,3 +1,10 @@
+Title: AWS IoT | 進階資訊分享
+Description: 在 AWS IoT的資源上，有部份的 topic name是被保留，並寫說明用IoT service 驅動lambda.
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # AWS IoT - 進階
 
 ### IoT reserved topic

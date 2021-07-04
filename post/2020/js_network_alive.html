@@ -1,0 +1,67 @@
+
+<head>
+<title>Javascript detect network connect status</title>
+<meta charset="utf-8" />
+<meta name="description" content="當我們在開發網站時，可能會遇到需要偵測網路情況，給予使用者是當的反饋。例如做檔案上傳時，如果網路斷線又回復連接時，需要提醒使用者可以做續傳的動作" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="js-detect-network-connect-status">[JS] detect network connect status</h1>
+<ul>
+<li>當我們在開發網站時，可能會遇到需要偵測網路情況，給予使用者是當的反饋。例如做檔案上傳時，如果網路斷線又回復連接時，需要提醒使用者可以做續傳的動作。目前市面上多樣的瀏覽器所提供的<code>online</code>/<code>offline</code>事件，可能沒有辦法有效的偵測到。</li>
+</ul>
+<p>:::warning<br />
+It is important to note that this event and attribute are inherently unreliable. A computer can be connected to a network without having Internet access.<br />
+:::</p>
+<ul>
+<li>目前各家瀏覽器針對 "Offline" 的定義都不相同，所以沒有一個有效率的方式可偵測瀏覽器的網路情況。斷線的定義位於broswer當電腦在受保護的私人網路下，所以沒有連線到外界網路的能力，要定義為Offline嗎？ 都沒接上網路但是client和server端都在127.0.0.1網段，可以互相溝通要算有網路嗎？</li>
+</ul>
+<p>一般開發網站時可能比較需要偵測連線到外埠網路的情況，所以下面是一斷偵測網路連線狀態的 example code。藉由嘗試存取自己網站的favicon.ico去判定對是否有網路的連線能力，我們透過 httprequest 的 HEADER method 去嘗試，再這個 method 下比較節省流量。<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">HTTP Method</a><br />
+:::warning<br />
+The HEAD method asks for a response identical to that of a GET request, but without the response body<br />
+:::</p>
+<p>```javascript=<br />
+export function doesConnectionExist() {<br />
+    return new Promise((resolve) =&gt; {<br />
+        const xhr = new XMLHttpRequest();<br />
+        const url = 'https://example.com/favicon.ico';<br />
+        const randomNum = Math.round(Math.random() * 10000);<br />
+        function processRequest() {<br />
+            if (xhr.readyState === 4) {<br />
+                if (xhr.status !== 0) {<br />
+                    resolve({ net: 'connect', time: new Date() });<br />
+                } else {<br />
+                    resolve({ net: 'disconnect', time: new Date() });<br />
+                }<br />
+            }<br />
+        }</p>
+<div class="codehilite"><pre><span></span><code>    xhr.timeout = 2000;
+    xhr.open(&#39;HEAD&#39;, `<span class="cp">${</span><span class="n">url</span><span class="cp">}</span>?rand=<span class="cp">${</span><span class="n">randomNum</span><span class="cp">}</span>`, true);
+    xhr.send();
+    xhr.addEventListener(&#39;readystatechange&#39;, processRequest, false);
+});
+</code></pre></div>
+
+<p>}<br />
+```</p>
+<h6 id="tags-javascript-httprequest-network-online-offline">tags: <code>Javascript</code>, <code>httprequest</code>, <code>network</code>, <code>online</code>, <code>offline</code></h6>
+</article>

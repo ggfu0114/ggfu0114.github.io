@@ -1,3 +1,11 @@
+Title: Javascript detect network connect status
+Description: 當我們在開發網站時，可能會遇到需要偵測網路情況，給予使用者是當的反饋。例如做檔案上傳時，如果網路斷線又回復連接時，需要提醒使用者可以做續傳的動作
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
+
 # [JS] detect network connect status
 - 當我們在開發網站時，可能會遇到需要偵測網路情況，給予使用者是當的反饋。例如做檔案上傳時，如果網路斷線又回復連接時，需要提醒使用者可以做續傳的動作。目前市面上多樣的瀏覽器所提供的`online`/`offline`事件，可能沒有辦法有效的偵測到。
 

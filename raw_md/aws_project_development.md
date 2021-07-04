@@ -1,3 +1,12 @@
+Title: 在Local machine開發AWS serverless project
+Description: 這個 Project 主要是拿來研究 AWS serverless 的開發規劃和未來建構 Project 的基礎參考。主要會用到 AWS Resource 有 API-gateway, Lambda, RDS, Congnito Services。
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
+
+
 # AWS dev project
 - 說明：這個 Project 主要是拿來研究 AWS serverless 的開發規劃和未來建構 Project 的基礎參考。主要會用到 AWS Resource 有 API-gateway, Lambda, RDS, Congnito Services。
 
