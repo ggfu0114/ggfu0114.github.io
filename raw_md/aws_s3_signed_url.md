@@ -28,7 +28,7 @@ Authorization: AWS AKIAIOSFODNN7EXAMPLE:frJIUN8DYpKDtOLCwo//yllqDzg=
 Authorization: AWS {AWSAccessKeyId}:{Signature}
 ```
 下面是 Nodejs 計算的Signature程式碼
-```javascript=
+```javascript
 var crypto = require("crypto");
 
 // from IAM role
@@ -76,7 +76,7 @@ console.log(StringToSign)
 
 在 Postman 上做發送照片的 request，Header參數上依然要填上 Authorization, Date參數，Content-Type填上"text/plain"。
 
-```javascript=
+```javascript
 var StringToSign = "PUT" + "\n" +
     "" + "\n" +
     "text/plain" + "\n" +
@@ -98,7 +98,7 @@ https://wisigntest.s3-ap-northeast-1.amazonaws.com/hello.jpg?AWSAccessKeyId=AKIA
 
 
 
-```javascript=
+```javascript
 var StringToSign = "GET" + "\n" +
     "" + "\n" +
     "" + "\n" +

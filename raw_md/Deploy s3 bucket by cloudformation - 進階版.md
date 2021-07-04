@@ -3,7 +3,7 @@
 
 #### 開發系統時部分的程式碼會參考到基礎建設的名稱，例如：S3 bucket自動部署創建出來的名稱，或是需要利用aws resource arn去做trigger lambda事件的綁定，都需要輸出佈建後的結果。
 
-```javascript=
+```javascript
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "Create S3 bucket on AWS",

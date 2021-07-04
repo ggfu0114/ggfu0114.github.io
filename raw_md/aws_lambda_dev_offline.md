@@ -49,7 +49,7 @@ custom:
 #### 執行API request出現錯誤
 
 
-```javascript=
+```javascript
 {
     "statusCode": 400,
     "error": "Bad Request",

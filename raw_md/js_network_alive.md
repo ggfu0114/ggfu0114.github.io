@@ -20,7 +20,7 @@ It is important to note that this event and attribute are inherently unreliable.
 The HEAD method asks for a response identical to that of a GET request, but without the response body
 :::
 
-```javascript=
+```javascript
 export function doesConnectionExist() {
     return new Promise((resolve) => {
         const xhr = new XMLHttpRequest();

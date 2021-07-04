@@ -15,7 +15,7 @@ base_url: https://ggfu0114.github.io/
 ` $aws/events/presence/disconnected/#`: 如果有任何的使用者斷線,就會推播訊息
 
 - 這個是當使用者 connected/disconnected 推播到 topic 裡的訊息範例
-```javascript=
+```javascript
 {
     "clientId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
     "timestamp": 1460065214626,
@@ -29,7 +29,7 @@ base_url: https://ggfu0114.github.io/
 `$aws/events/subscriptions/unsubscribed/#`：  如果有任何的使用者解訂閱了任何的 topic就會推播訊息
 
 - 這個是 subscribed/unsubscribed 推播的訊息範例
-```javascript=
+```javascript
 {
     "clientId": "186b5",
     "timestamp": 1460065214626,

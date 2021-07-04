@@ -21,7 +21,7 @@
 > Partition key說明
 
 - 利用Partition key，IoT的資料可以藉由group的方式去將資料分配的儲存在stream的shards裡面，最容易的方式是用網頁上提供的function: newuuid()，去隨機產出亂數平均的儲存資料，或是利用IoT的資料裡面的Key直做group。
-```javascript=
+```javascript
 [{'key':'a1', 'value':1}, {'key':'a2', 'value':2}, {'key':'a1', 'value':3}]
 ```
 如果Partition key填入`${key}`，那麼第1,3比資料會被送到stream裡的同一個shard，2則被送到另一個shard。

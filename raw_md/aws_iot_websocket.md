@@ -12,7 +12,7 @@ base_url: https://ggfu0114.github.io/
 
 > server side
 - 以下是server端需要產出帶有authentication的query url，使用上，前端只需要將url用get的方式呼叫就可以連接上IoT。
-```javascript=
+```javascript
 function SigV4Utils() {}
 
 SigV4Utils.getSignatureKey = function (key, date, region, service) {
