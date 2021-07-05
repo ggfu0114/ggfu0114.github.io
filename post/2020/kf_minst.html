@@ -43,7 +43,6 @@
 <li>將剛train好的model給volume到seldon-core的image上</li>
 <li>透過定義seldon graph啟動predict的機制</li>
 </ol>
-<p>{%youtube ABislaVmNys %}</p>
 <h3 id="_1">測試</h3>
 <p>可以利用<strong>seldon-core</strong>出的測試工具來檢視predict serving是否正確執行：</p>
 <div class="codehilite"><pre><span></span><code>$ seldon-core-api-tester --ambassador-path /seldon/kubeflow/mnist-classifier -p contract.json &lt;host ip&gt; &lt;host port&gt;

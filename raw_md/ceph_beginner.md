@@ -1,3 +1,11 @@
+Title: Ceph Cluster Storage 初階學習
+Description: 學習Ceph storage的基本資訊與如何安裝系統
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+base_url: https://ggfu0114.github.io/
+
+
 # Ceph Cluster Storage 初階學習
 ## Ceph 元件
 1. MON (monitor):

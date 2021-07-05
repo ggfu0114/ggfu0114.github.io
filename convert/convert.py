@@ -62,20 +62,15 @@ HOST_POST_URL = 'https://ggfu0114.github.io/post'
 SITEMAP_FILE_NAME = 'sitemap.xml'
 
 
-def _walk_all_html(fd: str):
-    # for root, dirs, files in os.walk(fd):
-
-    #     for file in files:
-    #         if file.endswith(".html"):
-    #             print(dirs)
-    #             print(os.path.join(file))
-    sub_paths = []
-    for file_path in glob.glob(f'{fd}/*/*.html'):
-
-        sub_path = file_path.replace(POST_HTML_FD, '')
-        sub_paths.append(sub_path)
-        print(sub_path)
-    return sub_paths
+def _walk_files_by_extension(fd: str, extension: str = 'html'):
+    sub_paths = set()
+    for root, dirs, files in os.walk(fd):
+        for file in files:
+            if file.endswith(extension):
+                full_file_path = os.path.join(root, file)
+                sub_path = full_file_path.replace(fd, '')
+                sub_paths.add(sub_path)
+    return list(sub_paths)
 
 
 def _generate_sitemap_xml(sub_paths: list) -> None:
@@ -105,13 +100,13 @@ def _generate_sitemap_xml(sub_paths: list) -> None:
     xml_string = etree.tostring(urlset, pretty_print=True).decode('utf-8')
     sitemap_file = os.path.join(PROJECT_ROOT_FD, SITEMAP_FILE_NAME)
     with open(sitemap_file, 'w') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>')
         f.write(xml_string)
 
 
-def main():
-    src = sys.argv[1]
-    md_text = open(src, 'r').read()
+def _md_to_html(src: str) -> str:
 
+    md_text = open(src, 'r').read()
     file_name = os.path.basename(src)
     file_name, extension = os.path.splitext(file_name)
     extensions = ['tables', 'nl2br', 'fenced_code', 'meta',
@@ -123,12 +118,13 @@ def main():
     markdown_md = md.Meta
     print(f'markdown_md:{markdown_md}')
     file_fd_path = pathlib.Path(__file__).parent.resolve()
-    print(file_fd_path)
+
     md_year = str(datetime.strptime(
         markdown_md.get('date')[0], '%d/%m/%Y').year)
-    print(f'file_fd_path＝{file_fd_path}')
+
     file_fd = os.path.join(file_fd_path, '..', 'post', md_year)
-    file_path = os.path.join(file_fd, f'{file_name}.html')
+    html_file_name = markdown_md.get('id', [file_name])[0]
+    file_path = os.path.join(file_fd, f'{html_file_name}.html')
 
     if not os.path.exists(file_fd):
         os.makedirs(file_fd)
@@ -136,11 +132,25 @@ def main():
     with open(file_path, 'w') as f:
         html_title = ''.join(markdown_md.get('title'))
         html_description = ''.join(markdown_md.get('description'))
-
         whole_html = TEMPLATE % (html_title, html_description, html)
         f.write(whole_html)
+    return file_path
 
-    paths = _walk_all_html(POST_HTML_FD)
+
+def main():
+    src = sys.argv[1]
+    _md_to_html(src)
+
+    python_flask_fd = '/home/chen/projects/python-flask'
+    paths = _walk_files_by_extension(python_flask_fd,'md')
+    for p in paths:
+        print(f' %%{python_flask_fd}')
+        full_path = python_flask_fd+p
+        print(f' %%{full_path}')
+        _md_to_html(full_path)
+        
+
+    paths = _walk_files_by_extension(POST_HTML_FD)
     _ = _generate_sitemap_xml(paths)
 
 

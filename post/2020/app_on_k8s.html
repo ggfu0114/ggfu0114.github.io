@@ -1,0 +1,111 @@
+
+<head>
+<title>部屬Web application到K8S環境</title>
+<meta charset="utf-8" />
+<meta name="description" content="在K8S的環境中,設定Application的網路環境, 讓使用者可以存取到資源。" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="deploy-first-api-server-on-k8s">Deploy first API server on K8S</h1>
+<h2 id="prepare-server-image">prepare server image</h2>
+<p>docker pu<br />
+image to registery</p>
+<h2 id="deploy-pod-on-k8s">deploy pod on K8S</h2>
+<p>執行create pod指令時出現以下錯誤，代表目前K8S架構裡只有Master沒有Node</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">0</span><span class="o">/</span><span class="mf">1</span> <span class="n">nodes</span> <span class="n">are</span> <span class="n">available</span><span class="p">:</span> <span class="mf">1</span> <span class="n">node</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">had</span> <span class="n">taints</span> <span class="n">that</span> <span class="n">the</span> <span class="n">pod</span> <span class="n">didn</span><span class="err">&#39;</span><span class="n">t</span> <span class="kr">to</span><span class="n">lerate</span>
+</code></pre></div>
+
+<p>執行 <code>kubectl get pods -o wide</code> 可以檢查目前pod的運行狀態</p>
+<div class="codehilite"><pre><span></span><code>NAME     READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE
+my-pod   1/1     Running   0          19m   10.244.1.2   ubuntu   &lt;none&gt;
+</code></pre></div>
+
+<ul>
+<li>驗證server是否已經成功的運行，可以用建立另一個暫時的pod，利用curl指令去取得server的資訊</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>kubectl run -i --tty alpine --image=alpine --restart=Never -- sh
+apk add curl
+curl -v http://10.244.1.2
+</code></pre></div>
+
+<h2 id="service-expose">service expose</h2>
+<h4 id="nodeport">NodePort</h4>
+<p>建立NodePort service開放port在node上，讓外部可以存取到Kubernetes Cluster內的Pod.<br />
+執行<code>kubectl get svc</code>取得目前service的列表如下：</p>
+<div class="codehilite"><pre><span></span><code>django-service   NodePort    10.97.136.223   &lt;none&gt;        80:30390/TCP   7m31s
+kubernetes       ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP        21h
+</code></pre></div>
+
+<p>以上的狀態目前有一個service IP為10.97.136.223，他會將30390收集到的資料導倒80port，<br />
+所以現在只要在node上執行<code>curl -v http://&lt;nodeip&gt;:30390</code>就可以取得django server的回應</p>
+<h4 id="ingress">Ingress</h4>
+<p>因為NodePort有一些限制和缺點<br />
+- port只能介於30000–32767<br />
+- 一個port只能接一個service<br />
+- node IP變動的話系統就需要修改參數</p>
+<p>所以Ingress就被創立出來解決這些事情。<br />
+首先在K8S環境中創立Ingress Controller<br />
+<code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml</code><br />
+執行<br />
+<code>kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx --watch</code><br />
+可以去驗證Ingress Controller是否成功被建立出來。</p>
+<h2 id="join-nodes-to-k8s">join nodes to K8S</h2>
+<ul>
+<li>get token on master node，產出<token id></li>
+</ul>
+<div class="codehilite"><pre><span></span><code>kubeadm token list
+</code></pre></div>
+
+<ul>
+<li>generate token ca-cert，產出<ca-cert></li>
+</ul>
+<div class="codehilite"><pre><span></span><code>sudo openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2&gt;/dev/null | openssl dgst -sha256 -hex | sed &#39;s/^.* //&#39;
+</code></pre></div>
+
+<ul>
+<li>run cmd on node</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>sudo kubeadm join --token &lt;token id&gt; &lt;master ip&gt;:6443 --discovery-token-ca-cert-hash sha256:&lt;ca-cert&gt;
+</code></pre></div>
+
+<p>OR</p>
+<div class="codehilite"><pre><span></span><code>sudo kubeadm token create --print-join-command
+</code></pre></div>
+
+<h4 id="qjoin-nodespodspendingdescribe-pod">Q:在Join nodes時pods會有pending現象，describe pod狀態後都會發現以下錯誤</h4>
+<div class="codehilite"><pre><span></span><code>failed to set bridge addr: &quot;cni0&quot; already has an IP address different from 10.244.3.1/24
+</code></pre></div>
+
+<p>解決辦法為：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">kubeadm</span> <span class="n">reset</span>
+<span class="n">systemctl</span> <span class="n">stop</span> <span class="n">kubelet</span>
+<span class="n">systemctl</span> <span class="n">stop</span> <span class="n">docker</span>
+<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cni</span><span class="o">/</span>
+<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">kubelet</span><span class="o">/*</span>
+<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">cni</span><span class="o">/</span>
+<span class="n">ifconfig</span> <span class="n">cni0</span> <span class="n">down</span>
+<span class="n">ifconfig</span> <span class="n">flannel</span><span class="o">.</span><span class="mi">1</span> <span class="n">down</span>
+<span class="n">ifconfig</span> <span class="n">docker0</span> <span class="n">down</span>
+<span class="n">ip</span> <span class="n">link</span> <span class="n">delete</span> <span class="n">cni0</span>
+<span class="n">ip</span> <span class="n">link</span> <span class="n">delete</span> <span class="n">flannel</span><span class="o">.</span><span class="mi">1</span>
+</code></pre></div>
+</article>

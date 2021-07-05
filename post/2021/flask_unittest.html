@@ -1,0 +1,40 @@
+
+<head>
+<title>Flask 要如何做測試</title>
+<meta charset="utf-8" />
+<meta name="description" content="如何利用python unittest去測試開發好的web application讓系統更加穩定" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="flask-unittest">flask-unittest</h1>
+<h2 id="describe">Describe</h2>
+<p>To execute the test function in the folder <code>test</code>, we have to import the source code folder into python system. Otherwise, the <code>ModuleNotFoundError</code> exception happened because the runtime system does't know the source folder.  Therefore, we add folder path import function in the <code>__init__</code> file, the path will be included every time we import the test module.</p>
+<h2 id="usage">Usage</h2>
+<h3 id="running-a-single-test-module">Running a single test module</h3>
+<div class="codehilite"><pre><span></span><code>python -m unittest test.test_main
+</code></pre></div>
+
+<h3 id="running-all-tests">Running all tests</h3>
+<p>In the <code>codes</code> directory, runs command:</p>
+<div class="codehilite"><pre><span></span><code>$ python -m unittest -s <span class="nb">test</span>
+</code></pre></div>
+</article>

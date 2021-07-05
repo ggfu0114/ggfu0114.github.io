@@ -1,3 +1,11 @@
+Title: 部屬Web application到K8S環境
+Description: 在K8S的環境中,設定Application的網路環境, 讓使用者可以存取到資源。
+Authors: GGFU
+Date: 31/12/2020
+Tags: 
+ID: app_on_k8s
+base_url: https://ggfu0114.github.io/
+
 # Deploy first API server on K8S
 
 ## prepare server image
