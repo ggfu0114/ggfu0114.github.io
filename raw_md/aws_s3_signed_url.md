@@ -28,6 +28,7 @@ Authorization: AWS AKIAIOSFODNN7EXAMPLE:frJIUN8DYpKDtOLCwo//yllqDzg=
 Authorization: AWS {AWSAccessKeyId}:{Signature}
 ```
 下面是 Nodejs 計算的Signature程式碼
+
 ```javascript
 var crypto = require("crypto");
 
@@ -76,6 +77,7 @@ console.log(StringToSign)
 
 在 Postman 上做發送照片的 request，Header參數上依然要填上 Authorization, Date參數，Content-Type填上"text/plain"。
 
+
 ```javascript
 var StringToSign = "PUT" + "\n" +
     "" + "\n" +
@@ -95,6 +97,7 @@ https://wisigntest.s3-ap-northeast-1.amazonaws.com/hello.jpg?AWSAccessKeyId=AKIA
 :::
 
 產出 Signature 需要將 Date 變數取代為預期失效的 Timestamp 時間。下面的例子即是當前時間加上 600 Seconds 時，URL 就會失效。
+
 
 
 

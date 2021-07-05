@@ -23,6 +23,7 @@
 > 操作步驟
 
 1. 為 init multipart 的需求產出數位簽章。
+
 ```javascript
 var StringToSign = "POST" + "\n" +
     "" + "\n" +
@@ -51,6 +52,7 @@ curl -X POST \
 > 操作步驟
 
 1. 為各個上傳 part 做數位簽章。重點在於要填上 `partNumber` 和 `uploadId`。第一的參數字己指定，第二個參數再一個步驟會產出。
+
 ```javascript
 var StringToSign = "PUT" + "\n" +
     "" + "\n" +
@@ -72,6 +74,7 @@ var StringToSign = "PUT" + "\n" +
 > 操作步驟
 
 1.為結束上傳且合併做數位簽章
+
 ```javascript
 
 var StringToSign = "POST" + "\n" +
@@ -109,6 +112,7 @@ var StringToSign = "POST" + "\n" +
 :::danger
 ### 利用 Javascript 發 request 時，Header 不能帶 Date 參數
 因為 Date 是內建的 Header 參數，所以不允許使用者去覆蓋參數，AWS 提供另一種變數 `x-amz-date` 當時間參數，所以計算的字串會變成以下，將 Date 的資訊列給空白下來。
+
 ```javascript
 let string_to_sign = method_str + "\n" +
             content_md5_str + "\n" +

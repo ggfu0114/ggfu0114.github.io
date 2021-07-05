@@ -18,6 +18,7 @@ aws cloudformation deploy --stack-name paulteststack --template-file ./s3-create
  <br>
 #### 創立基礎建設所需要的資源描述檔，以下是一個最簡單的建立s3 bucket的描述檔，只要修改`BucketName`為自己所想要命名的名稱，再將檔案存成json就可以開始部署了，bucket名稱不可以跟既有的名稱重複(global)。
 
+
 ```javascript
 {
   "AWSTemplateFormatVersion": "2010-09-09",
@@ -35,6 +36,7 @@ aws cloudformation deploy --stack-name paulteststack --template-file ./s3-create
 
 
 #### template 可以依照情境進行更進階的調整，例如調整bucket的CROS讓外部的前端程式可以進行存取。
+
 
 ```javascript
 {
