@@ -26,15 +26,50 @@
 </style>
 <article class="markdown-body">
 	<h1 id="flask-unittest">flask-unittest</h1>
-<h2 id="describe">Describe</h2>
-<p>To execute the test function in the folder <code>test</code>, we have to import the source code folder into python system. Otherwise, the <code>ModuleNotFoundError</code> exception happened because the runtime system does't know the source folder.  Therefore, we add folder path import function in the <code>__init__</code> file, the path will be included every time we import the test module.</p>
-<h2 id="usage">Usage</h2>
-<h3 id="running-a-single-test-module">Running a single test module</h3>
-<div class="codehilite"><pre><span></span><code>python -m unittest test.test_main
+<h2 id="_1">為什麼需要寫測試</h2>
+<p>寫測試對許多初學者來說，會覺的非常費時且沒有必要，心裡想著，我都親自測試過了，程式執行起來沒有什麼問題，為什麼需要花很多時間測試呢？</p>
+<p>對於這個疑問，最簡單的回答是，寫測試大多是為了<code>未來</code></p>
+<p>專案只有幾個情況下比較不需要寫測試：<br />
+1. 專案只會執行幾次就不再使用<br />
+2. 還在初期的規規劃跟實驗的狀態(POC)</p>
+<p>當你的專案有以下的情況,測試程式碼就會勢在必行：<br />
+1. 越寫多程式碼,程式的複雜度跟耦合度漸漸變高時<br />
+2. 專案成員變多,程式碼改動變頻繁的時候<br />
+測試程式碼就變的極為重要<br />
+測試可以讓你所開發的程式碼不會受到別人的改動而遭受影響(Side effect),當然要配合Dev Ops的CI/CD 效果才會比較好.</p>
+<blockquote>
+<p>Pytest vs. unittest</p>
+</blockquote>
+<p>在Python內建的模組裡有包含了測試，所以不需要安裝任何第3方套件就可以載入<code>unittest</code>模組來寫測試.<br />
+我個人式比較常用<code>pytest</code>.</p>
+<p><code>pytest</code>的好處是：<br />
+1. 提供比unittest更多的輔助工具來幫助測試<br />
+2. 所有用unitest語法寫的測試程式碼,都可以用pytest來執行</p>
+<h2 id="_2">執行測試</h2>
+<p>在Terminal上面執行pytest指令並加上一個資料夾，pytest就會自動去收集這個資料夾裡面帶有<code>test_*.py</code> 或是 <code>*_test.py</code>檔名的測試並執行</p>
+<div class="codehilite"><pre><span></span><code>pytest tests -v -s
 </code></pre></div>
 
-<h3 id="running-all-tests">Running all tests</h3>
-<p>In the <code>codes</code> directory, runs command:</p>
-<div class="codehilite"><pre><span></span><code>$ python -m unittest -s <span class="nb">test</span>
+<p><code>-v</code>: 描述詳細的測試訊息<br />
+<code>-s</code>: 顯示程式碼裡面印出來的資訊</p>
+<h2 id="unittest-mock">Unittest Mock</h2>
+<p><code>Mock</code> 的功能對於測試非常的重要，例如：A function 裡面包含執行 B, C, D功能，但是在測試 A 功能時，我們並不想要測試 C 功能，只需要 bypass C 功能，這個時候 Mock 功能就派上用場.</p>
+<p><code>patch</code> 是Mock裡面所提供的一個功能，它可以去取代掉原本功能的過程，例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@patch</span><span class="p">(</span><span class="s1">&#39;func.MathFunc.get_random_point&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_func</span><span class="p">):</span>
+    <span class="n">mock_func</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 </code></pre></div>
+
+<p>以上的程式碼代表，原本的get_random_point功能想要被取代，不論原本那個功能裡面的邏輯是什麼, 最終回傳值就一定會是一個tuple包含8,6這兩個值。</p>
+<h2 id="flask-test">Flask test</h2>
+<p>利用Flask在寫Web Application時, 通常會進行API test. 意思就是，我們會在API request中傳入參數, 並預期會有什麼response結果。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span>
+</code></pre></div>
+
+<p>在 Flask 的app裡提供test_client功能，當執行後此function會回傳一個專門拿來測試用的client，我們的測試項目就可以利用這個client去發送測試的request.</p>
+<p>利用test_client測試時，我們不需要特地自己去執行flask server.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>使用test client 我們可以針對server所有的網址跟method(get, post, update, delete)進行測試</p>
 </article>

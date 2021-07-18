@@ -1,0 +1,65 @@
+
+<head>
+<title>如何利用Flask WTForm快速建立表單</title>
+<meta charset="utf-8" />
+<meta name="description" content="利用Python code快數建立出Web Form讓使用者可以填寫並上傳資料。Create a form for user to fill in the data and post to the server." />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="GGFU" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+</head>
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+<article class="markdown-body">
+	<h1 id="flask-wtform">Flask WTForm使用入門</h1>
+<blockquote>
+<p>Server Flask Side</p>
+</blockquote>
+<p>在 Flask App 的程式碼裡面，我們可以利用python的程式碼去定義From的內容物，並呈現在網頁上給使用者填入資料跟上傳。</p>
+<p>首現要先創立出繼承<code>FlaskForm</code>的 class，並在class裡面去定義裡面有什麼欄位。<br />
+在預設的情況下，這些欄位會被依序的放置在網頁上.<br />
+欄位有分很多種不同的型態(例如：輸入欄位，下拉選單，日期選擇器...)<br />
+<a href="https://wtforms.readthedocs.io/en/2.3.x/fields/">官網</a>可以查到這個套件所提供的不同型態。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s1">&#39;Name&#39;</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">EmailField</span><span class="p">(</span><span class="s1">&#39;Email&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>在很多的情況下，我們會需要上傳檔案，例如照片或文件. Flask WTForm當然也提供內建的上傳檔案格式單一檔案 <code>FileField</code>,或是多檔選則上傳<code>MultipleFileField</code>.</p>
+<p>假設我們使用photo這個變數去建立檔案上傳的欄位,當使用者選好檔案，點選上傳後。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">photo</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="s1">&#39;Photo&#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">FileRequired</span><span class="p">()])</span>
+</code></pre></div>
+
+<p>上傳檔案的內容會被儲存在</p>
+<div class="codehilite"><pre><span></span><code><span class="n">form</span><span class="o">.</span><span class="n">photo</span><span class="o">.</span><span class="n">data</span>
+</code></pre></div>
+
+<p>完成定義表單的格式後，必須將整個Form物件初始化，如此一來可以將整個表單物件傳給Template去呈現出來，參考以下的程式碼。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">form</span> <span class="o">=</span> <span class="n">MyForm</span><span class="p">()</span>
+<span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">)</span>
+</code></pre></div>
+
+<blockquote>
+<p>Template Side</p>
+</blockquote>
+<p>在Jinja Template這一側，我們不需要去寫Form html的程式碼，因為Flask WTForm有預先幫我們定義了這各個元素的html程式碼</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ form.name.label }} {{ form.name(size=20) }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ form.email.label }} {{ form.email }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>form這個變數裡面，包含所有的欄位，我們可以自己編排這些欄位的顯示順序。</p>
+</article>

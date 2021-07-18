@@ -74,7 +74,8 @@ def _walk_files_by_extension(fd: str, extension: str = 'html'):
 
 
 def _generate_sitemap_xml(sub_paths: list) -> None:
-    # create XML
+    """Create XML sitemap for google search."""
+
     urlset = etree.Element('urlset')
     urlset.attrib['xmlns'] = 'http://www.sitemaps.org/schemas/sitemap/0.9'
 
@@ -105,6 +106,7 @@ def _generate_sitemap_xml(sub_paths: list) -> None:
 
 
 def _md_to_html(src: str) -> str:
+    """Convert markdown format to html content."""
 
     md_text = open(src, 'r').read()
     file_name = os.path.basename(src)
@@ -138,17 +140,19 @@ def _md_to_html(src: str) -> str:
 
 
 def main():
-    src = sys.argv[1]
-    _md_to_html(src)
-
-    python_flask_fd = '/home/chen/projects/python-flask'
-    paths = _walk_files_by_extension(python_flask_fd,'md')
-    for p in paths:
-        print(f' %%{python_flask_fd}')
-        full_path = python_flask_fd+p
-        print(f' %%{full_path}')
-        _md_to_html(full_path)
-        
+    if len(sys.argv) > 1:
+        print(f'Covert specific markdown file from markdown to html.')
+        src = sys.argv[1]
+        _md_to_html(src)
+    else:
+        print(f'Covert project folders from markdown to html.')
+        python_flask_fd = '/home/chen/projects/python-flask'
+        paths = _walk_files_by_extension(python_flask_fd, 'md')
+        for p in paths:
+            print(f' %%{python_flask_fd}')
+            full_path = python_flask_fd+p
+            print(f' %%{full_path}')
+            _md_to_html(full_path)
 
     paths = _walk_files_by_extension(POST_HTML_FD)
     _ = _generate_sitemap_xml(paths)
