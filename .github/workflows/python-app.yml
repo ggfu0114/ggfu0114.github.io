@@ -37,9 +37,14 @@ jobs:
     
     - name: Push to master branch
       run: |
-         /usr/bin/git add *
-         /usr/bin/git commit -am "Push by bot"
-         /usr/bin/git push master
+          /usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+          /usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :
+          /usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+          /usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :
+          /usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+          /usr/bin/git add *
+          /usr/bin/git commit -am "Push by bot"
+          /usr/bin/git push master
     
     - name: Lint with flake8
       run: |
