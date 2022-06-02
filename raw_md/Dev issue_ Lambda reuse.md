@@ -1,3 +1,10 @@
+Title: Dev issue: Lambda reuse 
+Description: Dev issue: Lambda reuse 
+Authors: GGFU
+Date: 03/06/2022
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # Dev issue: Lambda reuse 
 
 - 當系統透過 APIGateway 呼叫 Lambda 執行時，我以為Lambda會`全部`重新執行打包好的程式。所以開發時，我們將 database connection 物件當成 Global 物件使用，認為每次重新呼叫 Lambda 都會全部重新生成物件。因為這個觀念而導致系統錯誤，當 Project 的物件被 require 後或變成 global 參數，再次執行 Lambda container 會出現 reuse 特性，將不會再被重新執行而生成新物件，以下是一個範例。

@@ -1,3 +1,10 @@
+Title:  Deploy s3 bucket by cloudformation - 進階版
+Description:  Deploy s3 bucket by cloudformation - 進階版
+Authors: GGFU
+Date: 03/06/2022
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # Deploy s3 bucket by cloudformation - 進階版
 
 

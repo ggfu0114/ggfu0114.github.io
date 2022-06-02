@@ -1,3 +1,10 @@
+Title: Kubernate Env Setup FAQ(by Kubeadm)
+Description: Kubernate Env Setup FAQ(by Kubeadm)
+Authors: GGFU
+Date: 03/06/2022
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # Kubernate Env Setup FAQ(by Kubeadm)
 
 ### 前置作業

@@ -1,3 +1,10 @@
+Title: S3 multipart uplaod prsigned url教學
+Description: S3 multipart uplaod prsigned url教學
+Authors: GGFU
+Date: 03/06/2022
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # S3 multipart uplaod prsigned url教學
 
 
