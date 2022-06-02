@@ -1,3 +1,10 @@
+Title: 收集 AWS IoT data到 AWS kinesis 處理資料流
+Description: 收集 AWS IoT data到 AWS kinesis 處理資料流
+Authors: GGFU
+Date: 03/06/2022
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # 收集 AWS IoT data到 AWS kinesis 處理資料流
 
 - 使用AWS IoT服務來開發大量的資料傳輸系統，主要是想彙整資料或是做數據分析，AWS同樣提供資料串流的分析服務 `kinesis`. kinesis服務裡面有三個類別，Data Streams, Data Firehose, Data Analytics. 

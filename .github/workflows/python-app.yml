@@ -9,8 +9,6 @@ on:
   pull_request:
     branches: [ insert-article ]
 
-permissions:
-  contents: read
 
 jobs:
   build:
@@ -23,11 +21,31 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+    
     - name: Install dependencies
       run: |
+        cd convert
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run page markdown converter
+      run: |
+        python3 convert/convert.py
+    
+    - name: Commit files
+      run: |
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "Add changes" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
+
+    
+    
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names

@@ -1,3 +1,10 @@
+Title: PgPool2 install issu 紀錄安裝過程
+Description: PgPool2 install issu 紀錄安裝過程
+Authors: GGFU
+Date: 03/06/2022
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # PgPool2 install issu 紀錄安裝過程
 
 ## 安裝pgpool-II

@@ -58,6 +58,7 @@ base_url: https://ggfu0114.github.io/
 FILE_FD_PATH = pathlib.Path(__file__).parent.resolve()
 PROJECT_ROOT_FD = os.path.join(FILE_FD_PATH, '..')
 POST_HTML_FD = os.path.join(PROJECT_ROOT_FD, 'post')
+RAW_MD_FD = os.path.join(PROJECT_ROOT_FD, 'raw_md')
 HOST_POST_URL = 'https://ggfu0114.github.io/post'
 SITEMAP_FILE_NAME = 'sitemap.xml'
 
@@ -146,10 +147,10 @@ def main():
         _md_to_html(src)
     else:
         print(f'Covert project folders from markdown to html.')
-        python_flask_fd = '/home/chen/projects/python-flask'
+        python_flask_fd = RAW_MD_FD
+        print(f' %%{python_flask_fd}')
         paths = _walk_files_by_extension(python_flask_fd, 'md')
         for p in paths:
-            print(f' %%{python_flask_fd}')
             full_path = python_flask_fd+p
             print(f' %%{full_path}')
             _md_to_html(full_path)

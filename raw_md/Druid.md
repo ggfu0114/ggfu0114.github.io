@@ -1,3 +1,10 @@
+Title: Druid
+Description: Druid
+Authors: GGFU
+Date: 03/06/2022
+Tags: 
+base_url: https://ggfu0114.github.io/
+
 # Druid
 ## Druid Terms
 `multi-tenant`: a single instance of software runs on a server and serves multiple tenants
