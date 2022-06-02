@@ -1,103 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_api_getway_domain_name.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2021/flask_wtform.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/kf_install.html</loc>
-    <lastmod>2021-07-18</lastmod>
+    <loc>https://ggfu0114.github.io/post/2020/aws_iot_websocket.html</loc>
+    <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2021/python_flask_sharing.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_iot_websocket.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_iot_advance.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/kf_minst.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/app_on_k8s.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2021/flask_unittest.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_iot.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2021/python_dev_env_setup.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/js_network_alive.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_lambda_dev_offline.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/post.html</loc>
-    <lastmod>2021-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_s3_signed_url.html</loc>
-    <lastmod>2021-07-18</lastmod>
+    <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2020/aws_project_development.html</loc>
-    <lastmod>2021-07-18</lastmod>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/kf_minst.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_api_getway_domain_name.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/index.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/kf_install.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/python_dev_env_setup.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/index.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/index.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/flask_unittest.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/flask_wtform.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_lambda_dev_offline.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_iot_advance.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_iot.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/js_network_alive.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_s3_signed_url.html</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/app_on_k8s.html</loc>
+    <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2021/flask_first_app.html</loc>
-    <lastmod>2021-07-18</lastmod>
+    <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
