@@ -9,8 +9,7 @@ on:
   pull_request:
     branches: [ insert-article ]
 
-permissions:
-  contents: read
+permissions: read-all|write-all
 
 jobs:
   build:
@@ -35,16 +34,18 @@ jobs:
       run: |
         python3 convert/convert.py
     
-    - name: Push to master branch
+    - name: Commit files
       run: |
-          /usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-          /usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :
-          /usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-          /usr/bin/git submodule foreach --recursive git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :
-          /usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
-          /usr/bin/git add *
-          /usr/bin/git commit -am "Push by bot"
-          /usr/bin/git push master
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "Add changes" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
+
+    
     
     - name: Lint with flake8
       run: |
