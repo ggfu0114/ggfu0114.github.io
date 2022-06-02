@@ -5,9 +5,9 @@ name: Personal Page Build Job
 
 on:
   push:
-    branches: [ master ]
+    branches: [ insert-article ]
   pull_request:
-    branches: [ master ]
+    branches: [ insert-article ]
 
 permissions:
   contents: read
