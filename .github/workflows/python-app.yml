@@ -34,7 +34,13 @@ jobs:
     - name: Run page markdown converter
       run: |
         python3 convert/convert.py
-
+    
+    - name: Push to master branch
+      run: |
+         /usr/bin/git add *
+         /usr/bin/git commit -am "Push by bot"
+         /usr/bin/git push master
+    
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
