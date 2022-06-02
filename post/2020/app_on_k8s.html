@@ -31,7 +31,7 @@
 image to registery</p>
 <h2 id="deploy-pod-on-k8s">deploy pod on K8S</h2>
 <p>執行create pod指令時出現以下錯誤，代表目前K8S架構裡只有Master沒有Node</p>
-<div class="codehilite"><pre><span></span><code><span class="mf">0</span><span class="o">/</span><span class="mf">1</span> <span class="n">nodes</span> <span class="n">are</span> <span class="n">available</span><span class="p">:</span> <span class="mf">1</span> <span class="n">node</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">had</span> <span class="n">taints</span> <span class="n">that</span> <span class="n">the</span> <span class="n">pod</span> <span class="n">didn</span><span class="err">&#39;</span><span class="n">t</span> <span class="kr">to</span><span class="n">lerate</span>
+<div class="codehilite"><pre><span></span><code><span class="mf">0</span><span class="o">/</span><span class="mf">1</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">available</span><span class="p">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="n">node</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">had</span><span class="w"> </span><span class="n">taints</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">pod</span><span class="w"> </span><span class="n">didn</span><span class="err">&#39;</span><span class="n">t</span><span class="w"> </span><span class="kr">to</span><span class="n">lerate</span><span class="w"></span>
 </code></pre></div>
 
 <p>執行 <code>kubectl get pods -o wide</code> 可以檢查目前pod的運行狀態</p>
@@ -96,16 +96,16 @@ kubernetes       ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP        
 </code></pre></div>
 
 <p>解決辦法為：</p>
-<div class="codehilite"><pre><span></span><code><span class="n">kubeadm</span> <span class="n">reset</span>
-<span class="n">systemctl</span> <span class="n">stop</span> <span class="n">kubelet</span>
-<span class="n">systemctl</span> <span class="n">stop</span> <span class="n">docker</span>
-<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cni</span><span class="o">/</span>
-<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">kubelet</span><span class="o">/*</span>
-<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">cni</span><span class="o">/</span>
-<span class="n">ifconfig</span> <span class="n">cni0</span> <span class="n">down</span>
-<span class="n">ifconfig</span> <span class="n">flannel</span><span class="o">.</span><span class="mi">1</span> <span class="n">down</span>
-<span class="n">ifconfig</span> <span class="n">docker0</span> <span class="n">down</span>
-<span class="n">ip</span> <span class="n">link</span> <span class="n">delete</span> <span class="n">cni0</span>
-<span class="n">ip</span> <span class="n">link</span> <span class="n">delete</span> <span class="n">flannel</span><span class="o">.</span><span class="mi">1</span>
+<div class="codehilite"><pre><span></span><code><span class="n">kubeadm</span><span class="w"> </span><span class="n">reset</span><span class="w"></span>
+<span class="n">systemctl</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">kubelet</span><span class="w"></span>
+<span class="n">systemctl</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">docker</span><span class="w"></span>
+<span class="n">rm</span><span class="w"> </span><span class="o">-</span><span class="n">rf</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cni</span><span class="o">/</span><span class="w"></span>
+<span class="n">rm</span><span class="w"> </span><span class="o">-</span><span class="n">rf</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">kubelet</span><span class="o">/*</span><span class="w"></span>
+<span class="n">rm</span><span class="w"> </span><span class="o">-</span><span class="n">rf</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">cni</span><span class="o">/</span><span class="w"></span>
+<span class="n">ifconfig</span><span class="w"> </span><span class="n">cni0</span><span class="w"> </span><span class="n">down</span><span class="w"></span>
+<span class="n">ifconfig</span><span class="w"> </span><span class="n">flannel</span><span class="o">.</span><span class="mi">1</span><span class="w"> </span><span class="n">down</span><span class="w"></span>
+<span class="n">ifconfig</span><span class="w"> </span><span class="n">docker0</span><span class="w"> </span><span class="n">down</span><span class="w"></span>
+<span class="n">ip</span><span class="w"> </span><span class="n">link</span><span class="w"> </span><span class="n">delete</span><span class="w"> </span><span class="n">cni0</span><span class="w"></span>
+<span class="n">ip</span><span class="w"> </span><span class="n">link</span><span class="w"> </span><span class="n">delete</span><span class="w"> </span><span class="n">flannel</span><span class="o">.</span><span class="mi">1</span><span class="w"></span>
 </code></pre></div>
 </article>

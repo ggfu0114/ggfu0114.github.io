@@ -39,29 +39,28 @@ It is important to note that this event and attribute are inherently unreliable.
 :::warning<br />
 The HEAD method asks for a response identical to that of a GET request, but without the response body<br />
 :::</p>
-<p>```javascript=<br />
-export function doesConnectionExist() {<br />
-    return new Promise((resolve) =&gt; {<br />
-        const xhr = new XMLHttpRequest();<br />
-        const url = 'https://example.com/favicon.ico';<br />
-        const randomNum = Math.round(Math.random() * 10000);<br />
-        function processRequest() {<br />
-            if (xhr.readyState === 4) {<br />
-                if (xhr.status !== 0) {<br />
-                    resolve({ net: 'connect', time: new Date() });<br />
-                } else {<br />
-                    resolve({ net: 'disconnect', time: new Date() });<br />
-                }<br />
-            }<br />
-        }</p>
-<div class="codehilite"><pre><span></span><code>    xhr.timeout = 2000;
-    xhr.open(&#39;HEAD&#39;, `<span class="cp">${</span><span class="n">url</span><span class="cp">}</span>?rand=<span class="cp">${</span><span class="n">randomNum</span><span class="cp">}</span>`, true);
-    xhr.send();
-    xhr.addEventListener(&#39;readystatechange&#39;, processRequest, false);
-});
+<div class="codehilite"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">doesConnectionExist</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">xhr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">XMLHttpRequest</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;https://example.com/favicon.ico&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">randomNum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10000</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="kd">function</span><span class="w"> </span><span class="nx">processRequest</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">resolve</span><span class="p">({</span><span class="w"> </span><span class="nx">net</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;connect&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">()</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                    </span><span class="nx">resolve</span><span class="p">({</span><span class="w"> </span><span class="nx">net</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;disconnect&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">()</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="nx">xhr</span><span class="p">.</span><span class="nx">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2000</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;HEAD&#39;</span><span class="p">,</span><span class="w"> </span><span class="sb">`</span><span class="si">${</span><span class="nx">url</span><span class="si">}</span><span class="sb">?rand=</span><span class="si">${</span><span class="nx">randomNum</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="nx">xhr</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;readystatechange&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">processRequest</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
-<p>}<br />
-```</p>
 <h6 id="tags-javascript-httprequest-network-online-offline">tags: <code>Javascript</code>, <code>httprequest</code>, <code>network</code>, <code>online</code>, <code>offline</code></h6>
 </article>

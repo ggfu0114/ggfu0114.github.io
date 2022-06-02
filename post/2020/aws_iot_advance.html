@@ -33,29 +33,30 @@
 <p><code>$aws/events/presence/connected/#</code> : 如果有任何的使用者連上 IoT 就會推播訊息到這個 Topic <br />
 <code>$aws/events/presence/disconnected/#</code>: 如果有任何的使用者斷線,就會推播訊息</p>
 <ul>
-<li>這個是當使用者 connected/disconnected 推播到 topic 裡的訊息範例<br />
-```javascript=<br />
-{<br />
-    "clientId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",<br />
-    "timestamp": 1460065214626,<br />
-    "eventType": "connected",<br />
-    "sessionIdentifier": "00000000-0000-0000-0000-000000000000",<br />
-    "principalIdentifier": "000000000000/ABCDEFGHIJKLMNOPQRSTU:some-user/ABCDEFGHIJKLMNOPQRSTU:some-user"<br />
-}</li>
+<li>這個是當使用者 connected/disconnected 推播到 topic 裡的訊息範例</li>
 </ul>
-<div class="codehilite"><pre><span></span><code>`$aws/events/subscriptions/subscribed/#`: 如果有任何的使用者訂閱了任何的 topic就會推播訊息到這個topic
-`$aws/events/subscriptions/unsubscribed/#`：  如果有任何的使用者解訂閱了任何的 topic就會推播訊息
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;clientId&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;timestamp&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1460065214626</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;eventType&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;connected&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;sessionIdentifier&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;00000000-0000-0000-0000-000000000000&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;principalIdentifier&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;000000000000/ABCDEFGHIJKLMNOPQRSTU:some-user/ABCDEFGHIJKLMNOPQRSTU:some-user&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
 
-- 這個是 subscribed/unsubscribed 推播的訊息範例
-```javascript=
-{
-    &quot;clientId&quot;: &quot;186b5&quot;,
-    &quot;timestamp&quot;: 1460065214626,
-    &quot;eventType&quot;: &quot;subscribed&quot; | &quot;unsubscribed&quot;,
-    &quot;sessionIdentifier&quot;: &quot;00000000-0000-0000-0000-000000000000&quot;,
-    &quot;principalIdentifier&quot;: &quot;000000000000/ABCDEFGHIJKLMNOPQRSTU:some-user/ABCDEFGHIJKLMNOPQRSTU:some-user&quot;
-    &quot;topics&quot; : [&quot;foo/bar&quot;,&quot;device/data&quot;,&quot;dog/cat&quot;]
-}
+<p><code>$aws/events/subscriptions/subscribed/#</code>: 如果有任何的使用者訂閱了任何的 topic就會推播訊息到這個topic<br />
+<code>$aws/events/subscriptions/unsubscribed/#</code>：  如果有任何的使用者解訂閱了任何的 topic就會推播訊息</p>
+<ul>
+<li>這個是 subscribed/unsubscribed 推播的訊息範例</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;clientId&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;186b5&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;timestamp&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1460065214626</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;eventType&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;subscribed&quot;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s2">&quot;unsubscribed&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;sessionIdentifier&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;00000000-0000-0000-0000-000000000000&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;principalIdentifier&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;000000000000/ABCDEFGHIJKLMNOPQRSTU:some-user/ABCDEFGHIJKLMNOPQRSTU:some-user&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;topics&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;foo/bar&quot;</span><span class="p">,</span><span class="s2">&quot;device/data&quot;</span><span class="p">,</span><span class="s2">&quot;dog/cat&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p>:::info</p>
@@ -71,11 +72,11 @@ SELECT * as data FROM '$aws/events/presence/connected/#' <br />
 /<em> 將所有 IoT 所收到的資料都傳進去 lambda 的參數裡 </em>/</p>
 <p>SELECT * as data, topic() as topic, clientid() as cliendId, timestamp() as timestamp FROM '+/updateStatus'<br />
 /<em> 所有傳送到 +/updateStatus 的資料，我們將 data, topic,clientid, ts 都傳入 lambda</em>/</p>
-<div class="codehilite"><pre><span></span><code><span class="n n-Quoted">`actions`</span> <span class="n">用來定義要將哪隻</span> <span class="n">Lambda</span> <span class="n">驅動</span>
-<span class="o">-</span> <span class="n">透過</span> <span class="n">AWS</span> <span class="n">IoT</span> <span class="n">可手動選擇驅動的</span> <span class="n">Lambda</span>
-<span class="o">!</span><span class="err">[]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">i</span><span class="p">.</span><span class="n">imgur</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">oUCBSsh</span><span class="p">.</span><span class="n">png</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="n n-Quoted">`actions`</span><span class="w"> </span><span class="n">用來定義要將哪隻</span><span class="w"> </span><span class="n">Lambda</span><span class="w"> </span><span class="n">驅動</span><span class="w"></span>
+<span class="o">-</span><span class="w"> </span><span class="n">透過</span><span class="w"> </span><span class="n">AWS</span><span class="w"> </span><span class="n">IoT</span><span class="w"> </span><span class="n">可手動選擇驅動的</span><span class="w"> </span><span class="n">Lambda</span><span class="w"></span>
+<span class="o">!</span><span class="err">[]</span><span class="p">(</span><span class="n">https</span><span class="o">://</span><span class="n">i</span><span class="p">.</span><span class="n">imgur</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">oUCBSsh</span><span class="p">.</span><span class="n">png</span><span class="p">)</span><span class="w"></span>
 
-<span class="o">-</span> <span class="n">或是，用的是</span> <span class="n">serverless</span> <span class="n">套件去佈署</span> <span class="n">AWS</span> <span class="n">resources，下面是一個佈署範例：</span>
+<span class="o">-</span><span class="w"> </span><span class="n">或是，用的是</span><span class="w"> </span><span class="n">serverless</span><span class="w"> </span><span class="n">套件去佈署</span><span class="w"> </span><span class="n">AWS</span><span class="w"> </span><span class="n">resources，下面是一個佈署範例：</span><span class="w"></span>
 <span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">yaml=</span>
 <span class="n n-Quoted">playerUpdateStatus:</span>
 <span class="n n-Quoted">    handler: handler.handler_function</span>

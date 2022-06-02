@@ -60,13 +60,16 @@ custom:
 接著就可以用各種工具去發出request做開發測試</p>
 <p>:::danger</p>
 <h4 id="api-request">執行API request出現錯誤</h4>
-<p><code>javascript=
-{
-    "statusCode": 400,
-    "error": "Bad Request",
-    "message": "Invalid cookie value"
-}</code><br />
-- 經過測試，如果將IP綁在127.0.0.1或是沒有設定(系統預設為localhost)的話會出現access error，這個問題只要將 IP 綁在 0.0.0.0 然後 request 的 host 為指定 IP 就可以解決這個問題，ex : http://192.168.1.101/dev/test <br />
-:::</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;statusCode&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">400</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Bad Request&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;message&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Invalid cookie value&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<ul>
+<li>經過測試，如果將IP綁在127.0.0.1或是沒有設定(系統預設為localhost)的話會出現access error，這個問題只要將 IP 綁在 0.0.0.0 然後 request 的 host 為指定 IP 就可以解決這個問題，ex : http://192.168.1.101/dev/test <br />
+:::</li>
+</ul>
 <h6 id="tags-aws-offline">tags: <code>AWS</code>, <code>offline</code></h6>
 </article>

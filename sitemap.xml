@@ -1,115 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_iot_websocket.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2021/python_flask_sharing.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_project_development.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <loc>https://ggfu0114.github.io/post/2022/&#25910;&#38598; AWS IoT data&#21040; AWS kinesis &#34389;&#29702;&#36039;&#26009;&#27969;.html</loc>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2020/kf_minst.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2022/S3 multipart uplaod prsigned url&#25945;&#23416;.html</loc>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2020/aws_api_getway_domain_name.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ggfu0114.github.io/post/index.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/kf_install.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2021/python_dev_env_setup.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/index.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2021/index.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2021/flask_unittest.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <loc>https://ggfu0114.github.io/post/2020/aws_iot_websocket.html</loc>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2021/flask_wtform.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2020/aws_lambda_dev_offline.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_iot_advance.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/aws_iot.html</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ggfu0114.github.io/post/2020/js_network_alive.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2020/aws_s3_signed_url.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2022/Deploy s3 bucket by cloudformation.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_project_development.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2022/Deploy s3 bucket by cloudformation - &#36914;&#38542;&#29256;.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_iot.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/index.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/index.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2022/Kubernate Env Setup FAQ(by Kubeadm).html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/ceph_beginner.html</loc>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2020/app_on_k8s.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/index.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/flask_unittest.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/python_dev_env_setup.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2022/Dev issue_ Lambda reuse.html</loc>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ggfu0114.github.io/post/2021/flask_first_app.html</loc>
-    <lastmod>2022-06-03</lastmod>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/aws_iot_advance.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2021/python_flask_sharing.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/kf_install.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2020/js_network_alive.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2022/Druid.html</loc>
+    <lastmod>2022-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ggfu0114.github.io/post/2022/PgPool2 install issu &#32000;&#37636;&#23433;&#35037;&#36942;&#31243;.html</loc>
+    <lastmod>2022-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
