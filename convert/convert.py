@@ -23,7 +23,7 @@ TEMPLATE = """
 <link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
 <script>
     $(function () {
-      $("#includedNavigation").load("navigation_header.html");
+      $("#includedNavigation").load("../../navigation_header.html");
     });
   </script>
 </head>
