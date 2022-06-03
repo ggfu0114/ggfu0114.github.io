@@ -17,9 +17,15 @@ TEMPLATE = """
 <meta name="description" content="%s" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="GGFU" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+<script>
+    $(function () {
+      $("#includedNavigation").load("navigation_header.html");
+    });
+  </script>
 </head>
 <style>
 	.markdown-body {
@@ -36,9 +42,13 @@ TEMPLATE = """
 		}
 	}
 </style>
+<body>
+<!-- Navigation-->
+<div id="includedNavigation"></div>
 <article class="markdown-body">
 	%s
 </article>
+</body>
 """
 
 
