@@ -5,9 +5,15 @@
 <meta name="description" content="利用簡單的mnist來做為範例，介紹如何在Kubeflow進行training跟serving的流程。Kubeflow利用argo workflow將整個流程寫成腳本，透過指令驅動整個AI training與serving過程" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="GGFU" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+<script>
+    $(function () {
+      $("#includedNavigation").load("navigation_header.html");
+    });
+  </script>
 </head>
 <style>
 	.markdown-body {
@@ -24,6 +30,9 @@
 		}
 	}
 </style>
+<body>
+<!-- Navigation-->
+<div id="includedNavigation"></div>
 <article class="markdown-body">
 	<h1 id="kubeflow-mnist">Kubeflow Mnist範例介紹</h1>
 <p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*akWVsdGH6XW9SgDIiePq4Q.png" /></p>
@@ -129,3 +138,4 @@
 
 <h6 id="tags-mnist-seldon-core-kubeflow-argo-tfjob-model-ai">tags: <code>mnist</code> <code>seldon-core</code> <code>kubeflow</code> <code>argo</code> <code>tfjob</code> <code>model</code> <code>AI</code></h6>
 </article>
+</body>

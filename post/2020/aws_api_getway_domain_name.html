@@ -5,9 +5,15 @@
 <meta name="description" content="利用AWS的serverless服務開發 httpserver的情況下，很常會使用(Lambda+Apigateway)的服務，通常會用api-getway去當url route的服務" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="GGFU" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://ggfu0114.github.io/css/code_block.css"/>
+<script>
+    $(function () {
+      $("#includedNavigation").load("navigation_header.html");
+    });
+  </script>
 </head>
 <style>
 	.markdown-body {
@@ -24,6 +30,9 @@
 		}
 	}
 </style>
+<body>
+<!-- Navigation-->
+<div id="includedNavigation"></div>
 <article class="markdown-body">
 	<h1 id="aws-api-getway-custom-domain-name">AWS api-getway Custom Domain Name</h1>
 <p>利用AWS的serverless服務開發 httpserver的情況下，很常會使用(Lambda+Apigateway)的服務，通常會用api-getway去當url route的服務。部屬成功時，api-getway都會給一組類似以下的網址，https://${api-id}.execute-api.region.amazonaws.com/stage ，因為網址有可能因為部署的需求而改變，所以如果想要制定自己的url名稱，就得使用api-getway裡面的custom domain name功能。</p>
@@ -53,3 +62,4 @@
 <p>以上步驟都完成時就可以使用自己所設定的domain name去存取server了。</p>
 <h6 id="tags-apigetway-domain-name-custom-route53-acm">tags: <code>apigetway</code>, <code>domain name</code>, <code>custom</code>, <code>route53</code>, <code>ACM</code></h6>
 </article>
+</body>
