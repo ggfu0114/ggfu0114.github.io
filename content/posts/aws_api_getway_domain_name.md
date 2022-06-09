@@ -1,10 +1,16 @@
 ---
-title: AWS api-getway 客製化的 Domain Name
-description: 利用AWS的serverless服務開發 httpserver的情況下，很常會使用(Lambda+Apigateway)的服務，通常會用api-getway去當url route的服務
-authors: GGFU
-date: 31/12/2020
-tags: [ "markdown", "css", "html", "themes" ] 
-base_url: https://ggfu0114.github.io/
+title: "AWS api-getway 客製化的 Domain Name"
+description: "利用AWS的serverless服務開發 httpserver的情況下，很常會使用(Lambda+Apigateway)的服務，通常會用api-getway去當url route的服務"
+author: "GGFU"
+date: "2020-12-32"
+tags: 
+- markdown
+- css
+- html
+- themes
+categories:
+- AWS
+draft: false
 ---
 
 # AWS api-getway Custom Domain Name

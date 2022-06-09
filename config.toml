@@ -2,6 +2,9 @@ baseURL = "https://ggfu0114.github.io/"
 languageCode = "zh-tw"
 title = "GGfu Personal Study - 學習筆記"
 theme = "ananke"
+post = "/:year/:month/:slug/"
+picture = "images/avatars.png"
+sidebarBehavior = 10
 
 [menu]
 [[menu.main]]
