@@ -1,0 +1,39 @@
+<!doctype html><html lang=zh-tw><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Kubernate Env Setup FAQ(by Kubeadm) | GGfu Personal Study - 學習筆記</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Kubernate Env Setup FAQ(by Kubeadm)"><meta name=generator content="Hugo 0.100.2"><meta name=robots content="noindex, nofollow"><link rel=stylesheet href=/ananke/css/main.min.css><meta property="og:title" content="Kubernate Env Setup FAQ(by Kubeadm)"><meta property="og:description" content="Kubernate Env Setup FAQ(by Kubeadm)"><meta property="og:type" content="article"><meta property="og:url" content="https://ggfu0114.github.io/posts/kubernate-env-setup-faqby-kubeadm/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-03-06T00:00:00+00:00"><meta property="article:modified_time" content="2022-03-06T00:00:00+00:00"><meta itemprop=name content="Kubernate Env Setup FAQ(by Kubeadm)"><meta itemprop=description content="Kubernate Env Setup FAQ(by Kubeadm)"><meta itemprop=datePublished content="2022-03-06T00:00:00+00:00"><meta itemprop=dateModified content="2022-03-06T00:00:00+00:00"><meta itemprop=wordCount content="244"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="Kubernate Env Setup FAQ(by Kubeadm)"><meta name=twitter:description content="Kubernate Env Setup FAQ(by Kubeadm)"></head><body class="ma0 avenir bg-near-white"><header><div class=bg-black><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l justify-between items-center center"><a href=/ class="f3 fw2 hover-white no-underline white-90 dib">GGfu Personal Study - 學習筆記</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white no-underline white-90" href=/categories/ title="Category page">Category</a></li></ul><div class=ananke-socials></div></div></div></nav></div></header><main class=pb7 role=main><article class="flex-l flex-wrap justify-between mw8 center ph3"><header class="mt4 w-100"><aside class="instapaper_ignoref b helvetica tracked">POSTS</aside><div id=sharing class="mt3 ananke-socials"></div><h1 class="f1 athelas mt3 mb1">Kubernate Env Setup FAQ(by Kubeadm)</h1><p class=tracked>By <strong>GGFU</strong></p><time class="f6 mv4 dib tracked" datetime=2022-03-06T00:00:00Z>March 6, 2022</time></header><div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h3 id=前置作業>前置作業</h3><p>如何關掉swap功能：
+如果是linux，可透過以下指令去關掉swap功能
+<code>sudo swapoff -a && sudo sed -i '/swap/d' /etc/fstab</code></p><h3 id=安裝執行工具>安裝執行工具</h3><p>安裝kubelet kubeadm kubectl的方法</p><pre tabindex=0><code>sudo apt-get update &amp;&amp; sudo apt-get install -y apt-transport-https curl
+sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+</code></pre><p>官網說明：https://kubernetes.io/docs/setup/independent/install-kubeadm/</p><h3 id=開始架設>開始架設</h3><p>將電腦變成master node可執行：</p><pre tabindex=0><code>kubeadm init
+</code></pre><p>首先adm會先去做幾項檢測
+通過後會下載跟安裝k8s所需要的控制元件</p><h3 id=安裝過程的錯誤>安裝過程的錯誤</h3><h4 id=q1>Q1</h4><pre tabindex=0><code>Unable to connect to the server: x509: certificate signed by unknown authority (possibly because of &#34;crypto/rsa: verification error&#34; while trying to verify candidate authority certificate &#34;kubernetes&#34;)
+</code></pre><p>主要是因為沒執行以下的動作，導致user的權限不符合，無法使用kubctl cmd</p><pre tabindex=0><code>mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre><h4 id=q2>Q2</h4><pre tabindex=0><code>runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized
+</code></pre><p>kubectl logs -f -n kube-system</p><pre tabindex=0><code>failed to acquire lease: node &#34;ubuntu&#34; pod cidr not assigned
+</code></pre><p>執行<code>kubectl get pods --all-namespaces</code>會發現coreDns會是pending status
+需要先安裝flannel套件，並重啟kubeadm init加上<code>kubeadm init --pod-network-cidr=10.244.0.0/16</code></p><pre tabindex=0><code>kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+</code></pre><p>也可安裝WeaveNet：</p><pre tabindex=0><code>kubectl apply -f &#34;https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d &#39;\n&#39;)&#34;
+</code></pre><h4 id=q3>Q3</h4><p>執行<code>kubectl get pods --all-namespaces</code>，裝完flannel出現以下錯誤</p><pre tabindex=0><code>kube-system   coredns-576cbf47c7-hnnt2       0/1     CrashLoopBackOff   1          11m
+</code></pre><p>利用kubectl logs -f coredns-576cbf47c7-hnnt2 -n kube-system，看到以下錯誤的error message.</p><pre tabindex=0><code>2018/09/22 07:39:38 [FATAL] plugin/loop: Seen &#34;HINFO IN 8205794187887631643.5216586587165434789.&#34; more than twice, loop detected
+</code></pre><p>上網找了一些資料，發現了以下這篇
+<a href=https://blog.csdn.net/crystonesc/article/details/83387659>https://blog.csdn.net/crystonesc/article/details/83387659</a>
+主要原因: coredns會直接取用本機上/etc/resolv.conf裡的nameserver參數作為upstream server，在ubuntu系統上/etc/resolv.conf會加入自己的ip當作nameserver，所以導致無限循環，所以在log裡會見到loop detected</p><p>修改coredns configmap檔可以解決這個問題。
+執行以下CMD來修改configmap參數
+<code>kubectl edit cm coredns -n kube-system</code>
+將<code>/etc/resolv.conf</code>取代為<code>8.8.8.8</code></p><h4 id=q4>Q4</h4><p>將server給裝起來時describe出現以下錯誤訊息
+<code>Liveness probe failed</code>,<code>Readiness probe failed</code>
+代表server的pod沒有正確提供kubectl一個良好監控管道去得知pod的狀態</p><pre tabindex=0><code>livenessProbe:
+httpGet:
+  path: /liveliness
+  port: http
+readinessProbe:
+httpGet:
+  path: /readiness
+  port: http
+</code></pre><p>例如上面的設定檔代表kubectl會利用http偵測<code>/liveliness</code>,<code>/readiness</code>去得知有沒有response來決定pod是否存活與就緒</p><h4 id=q5-what-are-flannel-and-cni>Q5 what are flannel and cni</h4><ul><li><a href=https://feisky.gitbooks.io/sdn/container/flannel/>flannel</a></li><li><a href=https://feisky.gitbooks.io/sdn/container/cni/>cni</a></li></ul><ul class=pa0></ul><div class="mt6 instapaper_ignoref"></div></div><aside class="w-30-l mt6-l"></aside></article></main><footer class="bg-black bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href=https://ggfu0114.github.io/>&copy; GGfu Personal Study - 學習筆記 2022</a><div><div class=ananke-socials></div></div></div></footer></body></html>

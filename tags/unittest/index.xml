@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>unittest on GGfu Personal Study - 學習筆記</title><link>https://ggfu0114.github.io/tags/unittest/</link><description>Recent content in unittest on GGfu Personal Study - 學習筆記</description><generator>Hugo -- gohugo.io</generator><language>zh-tw</language><lastBuildDate>Thu, 01 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ggfu0114.github.io/tags/unittest/index.xml" rel="self" type="application/rss+xml"/><item><title>Flask 要如何做測試</title><link>https://ggfu0114.github.io/posts/flask-%E8%A6%81%E5%A6%82%E4%BD%95%E5%81%9A%E6%B8%AC%E8%A9%A6/</link><pubDate>Thu, 01 Jul 2021 00:00:00 +0000</pubDate><guid>https://ggfu0114.github.io/posts/flask-%E8%A6%81%E5%A6%82%E4%BD%95%E5%81%9A%E6%B8%AC%E8%A9%A6/</guid><description>flask-unittest 為什麼需要寫測試 寫測試對許多初學者來說，會覺的非常費時且沒有必要，心裡想著，我都親自測試過了，程式執行起來沒有什麼問題，為什麼需要花很多時間測試呢？
+對於這個疑問，最簡單的回答是，寫測試大多是為了未來
+專案只有幾個情況下比較不需要寫測試：
+專案只會執行幾次就不再使用 還在初期的規規劃跟實驗的狀態(POC) 當你的專案有以下的情況,測試程式碼就會勢在必行：
+越寫多程式碼,程式的複雜度跟耦合度漸漸變高時 專案成員變多,程式碼改動變頻繁的時候 測試程式碼就變的極為重要 測試可以讓你所開發的程式碼不會受到別人的改動而遭受影響(Side effect),當然要配合Dev Ops的CI/CD 效果才會比較好. Pytest vs. unittest
+在Python內建的模組裡有包含了測試，所以不需要安裝任何第3方套件就可以載入unittest模組來寫測試. 我個人式比較常用pytest.
+pytest的好處是：
+提供比unittest更多的輔助工具來幫助測試 所有用unitest語法寫的測試程式碼,都可以用pytest來執行 執行測試 在Terminal上面執行pytest指令並加上一個資料夾，pytest就會自動去收集這個資料夾裡面帶有test_*.py 或是 *_test.py檔名的測試並執行
+pytest tests -v -s -v: 描述詳細的測試訊息 -s: 顯示程式碼裡面印出來的資訊
+Unittest Mock Mock 的功能對於測試非常的重要，例如：A function 裡面包含執行 B, C, D功能，但是在測試 A 功能時，我們並不想要測試 C 功能，只需要 bypass C 功能，這個時候 Mock 功能就派上用場.
+patch 是Mock裡面所提供的一個功能，它可以去取代掉原本功能的過程，例如：
+@patch(&amp;#39;func.MathFunc.get_random_point&amp;#39;) def test_multiply(self, mock_func): mock_func.return_value = (8, 6) 以上的程式碼代表，原本的get_random_point功能想要被取代，不論原本那個功能裡面的邏輯是什麼, 最終回傳值就一定會是一個tuple包含8,6這兩個值。
+Flask test 利用Flask在寫Web Application時, 通常會進行API test.</description></item></channel></rss>

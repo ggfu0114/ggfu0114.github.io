@@ -1,0 +1,47 @@
+<!doctype html><html lang=zh-tw><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Kubeflow安裝及入門 | GGfu Personal Study - 學習筆記</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="安裝Kubeflow系統在機器上，分享debug過程"><meta name=generator content="Hugo 0.100.2"><meta name=robots content="noindex, nofollow"><link rel=stylesheet href=/ananke/css/main.min.css><meta property="og:title" content="Kubeflow安裝及入門"><meta property="og:description" content="安裝Kubeflow系統在機器上，分享debug過程"><meta property="og:type" content="article"><meta property="og:url" content="https://ggfu0114.github.io/posts/kf_install/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-12-31T00:00:00+00:00"><meta property="article:modified_time" content="2020-12-31T00:00:00+00:00"><meta itemprop=name content="Kubeflow安裝及入門"><meta itemprop=description content="安裝Kubeflow系統在機器上，分享debug過程"><meta itemprop=datePublished content="2020-12-31T00:00:00+00:00"><meta itemprop=dateModified content="2020-12-31T00:00:00+00:00"><meta itemprop=wordCount content="286"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="Kubeflow安裝及入門"><meta name=twitter:description content="安裝Kubeflow系統在機器上，分享debug過程"></head><body class="ma0 avenir bg-near-white"><header><div class=bg-black><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l justify-between items-center center"><a href=/ class="f3 fw2 hover-white no-underline white-90 dib">GGfu Personal Study - 學習筆記</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white no-underline white-90" href=/categories/ title="Category page">Category</a></li></ul><div class=ananke-socials></div></div></div></nav></div></header><main class=pb7 role=main><article class="flex-l flex-wrap justify-between mw8 center ph3"><header class="mt4 w-100"><aside class="instapaper_ignoref b helvetica tracked">POSTS</aside><div id=sharing class="mt3 ananke-socials"></div><h1 class="f1 athelas mt3 mb1">Kubeflow安裝及入門</h1><p class=tracked>By <strong>GGFU</strong></p><time class="f6 mv4 dib tracked" datetime=2020-12-31T00:00:00Z>December 31, 2020</time></header><div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h3 id=安裝需求>安裝需求</h3><ul><li>安裝好ksonnet, Version 0.11.0 or later.</li><li>Kubernetes 1.8 or later</li></ul><h4 id=安裝ksonnet>安裝ksonnet</h4><pre tabindex=0><code>export KS_VER=0.12.0
+export KS_PKG=ks_${KS_VER}_linux_amd64
+wget -O /tmp/${KS_PKG}.tar.gz https://github.com/ksonnet/ksonnet/releases/download/v${KS_VER}/${KS_PKG}.tar.gz \
+  --no-check-certificate
+mkdir -p ${HOME}/bin
+tar -xvf /tmp/$KS_PKG.tar.gz -C ${HOME}/bin
+export PATH=$PATH:${HOME}/bin/$KS_PKG
+</code></pre><p>官方皆學的網站可以參考： <a href=https://www.kubeflow.org/docs/guides/components/ksonnet/>linux install ks</a></p><h4 id=安裝kubeflow>安裝kubeflow</h4><ul><li>下載安裝kubeflow的script</li></ul><pre tabindex=0><code>export KUBEFLOW_SRC=kf_src
+mkdir ${KUBEFLOW_SRC}
+cd ${KUBEFLOW_SRC}
+export KUBEFLOW_TAG=v0.3.1
+curl https://raw.githubusercontent.com/kubeflow/kubeflow/${KUBEFLOW_TAG}/scripts/download.sh | bash
+</code></pre><ul><li>將下載好的ks檔部署到K8S環境上</li></ul><pre tabindex=0><code>export KFAPP=kf_conf
+scripts/kfctl.sh init ${KFAPP} --platform none
+cd ${KFAPP}
+../scripts/kfctl.sh generate k8s
+../scripts/kfctl.sh apply k8s
+</code></pre><h4 id=驗證kubeflow-status>驗證kubeflow status</h4><p>執行<code>kubectl get pods --all-namespaces</code>可以檢視目前pod運行的狀態
+會發現有一個pod會是<code>pending</code>的狀態，<code>vizier-db-547967c899-ppr4p</code>
+執行<code>kubectl describe vizier-db-547967c899-ppr4p -n kubeflow</code>
+可以看到events出現以下字眼</p><pre tabindex=0><code>Warning  FailedScheduling  1m (x67 over 6m)  default-scheduler  pod has unbound PersistentVolumeClaims
+</code></pre><p>因為沒有PV，所以DB沒辦法正常啟動，所以只要建立一個PV給資料庫儲存東西就會解決這個問題。</p><h4 id=q安裝過程出現namespaces-kubeflow-not-found>Q:安裝過程出現<code>namespaces "kubeflow" not found</code></h4><ul><li>因為Kubeflow version 0.3.0有點問題，只要改成0.3.1即可</li></ul><h4 id=q安裝啟動後pod出現以下的錯誤>Q:安裝啟動後pod出現以下的錯誤：</h4><pre tabindex=0><code>The node was low on resource: ephemeral-storage. Container statsd was using 52Ki, which exceeds its request of 0. Container ambassador was using 244Ki, which exceeds its request of 0. Container statsd-sink was using 52Ki, which exceeds its request of 0.
+</code></pre><p>node的空間已經不夠了，導致我的pod被驅逐(evicted)</p><h3 id=進入jupyter-service>進入jupyter service</h3><p>如果是在local端的主機自建的Kubeflow
+有兩個方式可以進去到jupyter介面</p><ol><li>port forward</li></ol><pre tabindex=0><code>kubectl port-forward svc/tf-hub-lb -n kubeflow 8080:80
+</code></pre><p>在網頁上打入<code>http://127.0.0.1:8080</code>就可以看到網頁</p><ol start=2><li>node port</li></ol><p>需要執行修改service<code>kubectl -n kubeflow edit svc tf-hub-lb</code>
+修改成以下狀態</p><pre tabindex=0><code>sessionAffinity: None
+  type: NodePort
+</code></pre><h3 id=啟用gpu-node>啟用GPU node</h3><ul><li>如果主機上有想要用GPU加速Machine Learning的速度，需要將有GPU的node加入Kubernates的cluster裡面</li></ul><pre tabindex=0><code>kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
+</code></pre><p>透過安裝nvidia plugin可以enable GPU的support</p><ul><li>檢查node中gpu數量</li></ul><pre tabindex=0><code>kubectl get nodes &#34;-o=custom-columns=NAME:.metadata.name,GPU:.status.allocatable.nvidia\.com/gpu&#34;
+</code></pre><h4 id=q>Q:</h4><p>雖然在K8S環境上已經有join GPU的node, 但是還是無法取的GPU的資訊，用log看了一下gpu plugin pod的資訊，發現以下錯誤訊息：</p><pre tabindex=0><code>2018/11/15 03:49:12 Failed to initialize NVML: could not load NVML library.
+2018/11/15 03:49:12 If this is a GPU node, did you set the docker default runtime to `nvidia`?
+</code></pre><p>解決的辦法為：修改<code>/etc/docker/daemon.json</code>的資訊，讓docker的default-runtime為nvidia</p><pre tabindex=0><code>{
+    &#34;default-runtime&#34;: &#34;nvidia&#34;,
+    &#34;runtimes&#34;: {
+        &#34;nvidia&#34;: {
+            &#34;path&#34;: &#34;/usr/bin/nvidia-container-runtime&#34;,
+            &#34;runtimeArgs&#34;: []
+        }
+    }
+}
+</code></pre><h3 id=刪除kubeflow>刪除kubeflow</h3><p>kubectl delete namespace kubeflow -n kubeflow</p><h3 id=faq>FAQ</h3><p>執行ks init都會出現以下錯誤訊息：
+<code>panic: runtime error: invalid memory address or nil pointer dereference</code>
+上網查了一下好像是k8s版本為v1.12版本時所會出現的錯誤，必須降版到1.11去解決這個issue</p><pre tabindex=0><code>curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - &amp;&amp; \
+  echo &#34;deb http://apt.kubernetes.io/ kubernetes-xenial main&#34; | sudo tee /etc/apt/sources.list.d/kubernetes.list &amp;&amp; \
+  sudo apt-get update -q &amp;&amp; \
+  sudo apt-get install -qy --allow-downgrades kubelet=1.11.4-00 kubectl=1.11.4-00 kubeadm=1.11.4-00
+</code></pre><ul class=pa0></ul><div class="mt6 instapaper_ignoref"></div></div><aside class="w-30-l mt6-l"></aside></article></main><footer class="bg-black bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href=https://ggfu0114.github.io/>&copy; GGfu Personal Study - 學習筆記 2022</a><div><div class=ananke-socials></div></div></div></footer></body></html>
