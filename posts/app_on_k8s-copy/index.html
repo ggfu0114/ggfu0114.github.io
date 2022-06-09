@@ -1,0 +1,33 @@
+<!doctype html><html lang=zh-tw><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>部屬Web application到K8S環境 | GGfu Personal Study - 學習筆記</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="在K8S的環境中,設定Application的網路環境, 讓使用者可以存取到資源。"><meta name=generator content="Hugo 0.100.2"><meta name=robots content="noindex, nofollow"><link rel=stylesheet href=/ananke/css/main.min.css><meta property="og:title" content="部屬Web application到K8S環境"><meta property="og:description" content="在K8S的環境中,設定Application的網路環境, 讓使用者可以存取到資源。"><meta property="og:type" content="article"><meta property="og:url" content="https://ggfu0114.github.io/posts/app_on_k8s-copy/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-12-31T00:00:00+00:00"><meta property="article:modified_time" content="2020-12-31T00:00:00+00:00"><meta itemprop=name content="部屬Web application到K8S環境"><meta itemprop=description content="在K8S的環境中,設定Application的網路環境, 讓使用者可以存取到資源。"><meta itemprop=datePublished content="2020-12-31T00:00:00+00:00"><meta itemprop=dateModified content="2020-12-31T00:00:00+00:00"><meta itemprop=wordCount content="232"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="部屬Web application到K8S環境"><meta name=twitter:description content="在K8S的環境中,設定Application的網路環境, 讓使用者可以存取到資源。"></head><body class="ma0 avenir bg-near-white"><header><div class=bg-black><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l justify-between items-center center"><a href=/ class="f3 fw2 hover-white no-underline white-90 dib">GGfu Personal Study - 學習筆記</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white no-underline white-90" href=/categories/ title="Category page">Category</a></li></ul><div class=ananke-socials></div></div></div></nav></div></header><main class=pb7 role=main><article class="flex-l flex-wrap justify-between mw8 center ph3"><header class="mt4 w-100"><aside class="instapaper_ignoref b helvetica tracked">POSTS</aside><div id=sharing class="mt3 ananke-socials"></div><h1 class="f1 athelas mt3 mb1">部屬Web application到K8S環境</h1><p class=tracked>By <strong>GGFU</strong></p><time class="f6 mv4 dib tracked" datetime=2020-12-31T00:00:00Z>December 31, 2020</time></header><div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id=deploy-first-api-server-on-k8s>Deploy first API server on K8S</h1><h2 id=prepare-server-image>prepare server image</h2><p>docker pu
+image to registery</p><h2 id=deploy-pod-on-k8s>deploy pod on K8S</h2><p>執行create pod指令時出現以下錯誤，代表目前K8S架構裡只有Master沒有Node</p><pre tabindex=0><code>0/1 nodes are available: 1 node(s) had taints that the pod didn&#39;t tolerate
+</code></pre><p>執行 <code>kubectl get pods -o wide</code> 可以檢查目前pod的運行狀態</p><pre tabindex=0><code>NAME     READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE
+my-pod   1/1     Running   0          19m   10.244.1.2   ubuntu   &lt;none&gt;
+</code></pre><ul><li>驗證server是否已經成功的運行，可以用建立另一個暫時的pod，利用curl指令去取得server的資訊</li></ul><pre tabindex=0><code>kubectl run -i --tty alpine --image=alpine --restart=Never -- sh
+apk add curl
+curl -v http://10.244.1.2
+</code></pre><h2 id=service-expose>service expose</h2><h4 id=nodeport>NodePort</h4><p>建立NodePort service開放port在node上，讓外部可以存取到Kubernetes Cluster內的Pod.
+執行<code>kubectl get svc</code>取得目前service的列表如下：</p><pre tabindex=0><code>django-service   NodePort    10.97.136.223   &lt;none&gt;        80:30390/TCP   7m31s
+kubernetes       ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP        21h
+</code></pre><p>以上的狀態目前有一個service IP為10.97.136.223，他會將30390收集到的資料導倒80port，
+所以現在只要在node上執行<code>curl -v http://&lt;nodeip>:30390</code>就可以取得django server的回應</p><h4 id=ingress>Ingress</h4><p>因為NodePort有一些限制和缺點</p><ul><li>port只能介於30000–32767</li><li>一個port只能接一個service</li><li>node IP變動的話系統就需要修改參數</li></ul><p>所以Ingress就被創立出來解決這些事情。
+首先在K8S環境中創立Ingress Controller
+<code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml</code>
+執行
+<code>kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx --watch</code>
+可以去驗證Ingress Controller是否成功被建立出來。</p><h2 id=join-nodes-to-k8s>join nodes to K8S</h2><ul><li>get token on master node，產出</li></ul><pre tabindex=0><code>kubeadm token list
+</code></pre><ul><li>generate token ca-cert，產出</li></ul><pre tabindex=0><code>sudo openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2&gt;/dev/null | openssl dgst -sha256 -hex | sed &#39;s/^.* //&#39;
+</code></pre><ul><li>run cmd on node</li></ul><pre tabindex=0><code>sudo kubeadm join --token &lt;token id&gt; &lt;master ip&gt;:6443 --discovery-token-ca-cert-hash sha256:&lt;ca-cert&gt;
+</code></pre><p>OR</p><pre tabindex=0><code>sudo kubeadm token create --print-join-command
+</code></pre><h4 id=q在join-nodes時pods會有pending現象describe-pod狀態後都會發現以下錯誤>Q:在Join nodes時pods會有pending現象，describe pod狀態後都會發現以下錯誤</h4><pre tabindex=0><code>failed to set bridge addr: &#34;cni0&#34; already has an IP address different from 10.244.3.1/24
+</code></pre><p>解決辦法為：</p><pre tabindex=0><code>kubeadm reset
+systemctl stop kubelet
+systemctl stop docker
+rm -rf /var/lib/cni/
+rm -rf /var/lib/kubelet/*
+rm -rf /etc/cni/
+ifconfig cni0 down
+ifconfig flannel.1 down
+ifconfig docker0 down
+ip link delete cni0
+ip link delete flannel.1
+</code></pre><ul class=pa0></ul><div class="mt6 instapaper_ignoref"></div></div><aside class="w-30-l mt6-l"></aside></article></main><footer class="bg-black bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href=https://ggfu0114.github.io/>&copy; GGfu Personal Study - 學習筆記 2022</a><div><div class=ananke-socials></div></div></div></footer></body></html>
