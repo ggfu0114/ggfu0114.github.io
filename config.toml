@@ -1,0 +1,12 @@
+baseURL = "https://ggfu0114.github.io/"
+languageCode = "zh-tw"
+title = "GGfu Personal Study - 學習筆記"
+theme = "ananke"
+
+[menu]
+[[menu.main]]
+  identifier = 'article'
+  name = 'Article'
+  title = 'blog section'
+  url = '/articles/'
+  weight = -110
