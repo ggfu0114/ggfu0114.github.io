@@ -1,6 +1,6 @@
 ---
-title: Dev issue: "Lambda reuse "
-description: Dev issue: "Lambda reuse" 
+title: "Dev issue: Lambda reuse "
+description: "Dev issue: Lambda reuse" 
 author: "GGFU"
 sate: "2022-03-06"
 tags: 
