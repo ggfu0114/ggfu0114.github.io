@@ -14,7 +14,7 @@ categories:
 draft: false
 ---
 
-# AWS api-getway Custom Domain Name
+# AWS api-getway Customized Domain Name
 
 利用AWS的serverless服務開發 httpserver的情況下，很常會使用(Lambda+Apigateway)的服務，通常會用api-getway去當url route的服務。部屬成功時，api-getway都會給一組類似以下的網址，https://${api-id}.execute-api.region.amazonaws.com/stage ，因為網址有可能因為部署的需求而改變，所以如果想要制定自己的url名稱，就得使用api-getway裡面的custom domain name功能。
 

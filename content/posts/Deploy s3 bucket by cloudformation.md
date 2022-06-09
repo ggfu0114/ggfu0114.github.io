@@ -11,8 +11,6 @@ tags:
 - batch`
 ---
 
-# Deploy s3 bucket by cloudformation
-
 #### 預先準備
 需要先把 aws cli 給裝起來
 

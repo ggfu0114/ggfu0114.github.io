@@ -2,7 +2,9 @@
 title: 部屬Web application到K8S環境
 description: 在K8S的環境中,設定Application的網路環境, 讓使用者可以存取到資源。
 author: GGFU
-date: "2020-12-31"
+
+
+# Serverless offline 開發設定 - 基礎篇
 ---
 
 # Deploy first API server on K8S

@@ -10,7 +10,6 @@ tags:
 ---
 
 
-# Ceph Cluster Storage 初階學習
 ## Ceph 元件
 1. MON (monitor):
    - 維護整個cluster的狀態
