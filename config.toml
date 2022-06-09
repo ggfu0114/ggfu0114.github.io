@@ -3,13 +3,23 @@ languageCode = "zh-tw"
 title = "GGfu Personal Study - 學習筆記"
 theme = "ananke"
 post = "/:year/:month/:slug/"
-picture = "images/avatars.png"
 sidebarBehavior = 10
+Paginate = 10
+
 
 [menu]
 [[menu.main]]
-  identifier = 'article'
-  name = 'Article'
-  title = 'blog section'
-  url = '/articles/'
-  weight = -110
+  identifier = 'category'
+  name = 'Category'
+  title = 'post categories'
+  url = '/categories/'
+  weight = 1
+
+[params]
+  featured_image = 'images/gohugo-default-sample-hero-image.jpg'
+  recent_posts_number = 10
+
+[sitemap]
+  changefreq = "monthly"
+  priority = 0.5
+  filename = "sitemap.xml"

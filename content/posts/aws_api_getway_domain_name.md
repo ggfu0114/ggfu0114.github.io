@@ -2,12 +2,13 @@
 title: "AWS api-getway 客製化的 Domain Name"
 description: "利用AWS的serverless服務開發 httpserver的情況下，很常會使用(Lambda+Apigateway)的服務，通常會用api-getway去當url route的服務"
 author: "GGFU"
-date: "2020-12-32"
+date: "2020-12-31"
+featured_image: "https://cdn.pixabay.com/photo/2022/03/08/07/08/water-7055153_960_720.jpg"
 tags: 
-- markdown
-- css
-- html
-- themes
+- apigetway
+- domain name
+- route53
+- ACM
 categories:
 - AWS
 draft: false
