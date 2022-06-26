@@ -5,7 +5,7 @@ author: "GGFU"
 date: "2022-06-26"
 Tags: 
 - GCP
-- storage
+- cloud storage
 - signed URL
 ---
 

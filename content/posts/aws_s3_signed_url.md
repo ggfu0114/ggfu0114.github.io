@@ -5,8 +5,8 @@ author: "GGFU"
 date: "2020-12-31"
 Tags: 
 - S3
-- presign
-- REST
+- cloud storage
+- signed URL
 ---
 
 
